@@ -1,0 +1,4 @@
+{"id": 1, "adep": "WSSS", "ades": "RJTT", "waypoints": [{"latitude":1.1,"longitude":103.8}]}
+{}
+not valid JSON
+{"id": 2, "ades": "RJTT", "waypoints": []}

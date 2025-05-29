@@ -1,0 +1,50 @@
+.routeSummary {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1c1c1c;
+    color: #ffffff;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 13px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    min-width: 300px;
+    max-width: 90vw;
+  }
+  
+  .routeSummary h4 {
+    margin-top: 0;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 8px;
+  }
+  
+  .routeSummary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .routeSummary li {
+    margin-bottom: 6px;
+  }
+  
+  .routeSummary strong {
+    color: #bbb;
+  }
+  
+  .routeSummary button {
+    all: unset;
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    cursor: pointer;
+    color: #999;
+    font-size: 16px;
+  }
+  

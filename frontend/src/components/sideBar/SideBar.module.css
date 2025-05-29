@@ -1,0 +1,166 @@
+.sidebarContainer {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 15%;
+  padding: 0 1rem;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  z-index: 2000;
+  pointer-events: auto;
+}
+
+.sidebarHeader {
+  height: 20px;
+  display: flex;
+  width: 100%;
+  border: 1px solid #333;
+  border-bottom: none;
+  border-radius: 8px 8px 4px 4px;
+  align-items: center;
+  justify-content: flex-end;
+  background: rgba(12, 12, 12, 0.9);
+  position: sticky;
+  z-index: 10;
+}
+
+.sidebarHeader > button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.sidebarTitle {
+  display: flex;
+  justify-content: space-between;
+  height: 20px;
+  align-items: center;
+}
+
+.clearButton {
+  background-color: #222;
+  border: none;
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  color: #ccc;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.clearButton:hover {
+  background-color: #333;
+  color: white;
+}
+
+.clearButton:focus {
+  outline: none;
+}
+
+.sidebarBody {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.sidebar {
+  background: rgba(12, 12, 12, 0.9);
+  border: 1px solid #333;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  padding: 1rem;
+  max-height: 85vh;
+  overflow-y: auto;
+  z-index: 1000;
+  pointer-events: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.arrow {
+  font-size: 1.2rem;
+  color: #ccc;
+  transition: transform 0.2s ease;
+}
+
+.sidebarHeader:hover .arrow {
+  color: white;
+}
+
+.sidebar > input {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 4px;
+  font-size: 0.8rem;
+}
+
+.sidebar > h4 {
+  color: #fff;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+.sidebar li {
+  margin-bottom: 4px;
+}
+.sidebar h3 {
+  margin-top: 0;
+  color: #fff;
+}
+
+.airportFilters {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+.quickFilters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.quickFilters button {
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  background: #222;
+  border: 1px solid #444;
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.dateContainer {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 8px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #444;
+  margin: 16px 0;
+}

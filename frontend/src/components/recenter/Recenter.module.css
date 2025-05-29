@@ -1,0 +1,26 @@
+.button {
+    position: absolute;
+    bottom: 100px;
+    right: 10px;
+    z-index: 1000;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    transition: 0.2s;
+  }
+  
+  .button:hover {
+    background: #f4f4f4;
+  }
+  
+  .button img {
+    width: 16px;
+    height: 16px;
+  }

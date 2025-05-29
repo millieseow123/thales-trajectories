@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Trajectory } from '../types/trajectory';
+import { Trajectory } from '../../../shared/types/trajectory';
 
 export function parseTrajectoryFile(filePath: string): Trajectory[] {
     const parsed: Trajectory[] = [];

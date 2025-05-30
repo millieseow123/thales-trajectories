@@ -1,6 +1,25 @@
+import { createPool } from 'mysql2/promise';
 import fs from 'fs';
 import path from 'path';
-import { Trajectory } from '../../../shared/types/trajectory';
+import type { Trajectory } from '../../../shared/types/trajectory';
+
+//FOR SQL
+// const pool = createPool({
+//     host: process.env.DB_HOST || 'localhost',
+//     user: process.env.DB_USER || 'root',
+//     password: process.env.DB_PASSWORD || '',
+//     database: process.env.DB_NAME || 'trajectories_db',
+// });
+
+// export async function loadTrajectories(): Promise<Trajectory[]> {
+//     const [rows] = await pool.query('SELECT * FROM trajectories');
+//     return (rows as any[]).map(row => ({
+//         id: row.id,
+//         adep: row.adep,
+//         ades: row.ades,
+//         waypoints: row.waypoints,
+//     }));
+// }
 
 export function parseTrajectoryFile(filePath: string): Trajectory[] {
     const parsed: Trajectory[] = [];

@@ -1,5 +1,9 @@
 import type { Trajectory } from "../../../../shared/types/trajectory";
 import { computeTotalDistance } from "../../utils/computeDistance";
+import arrowImg from '../../assets/arrow.png';
+import departureIcon from "../../assets/departure.png";
+import arrivalIcon from "../../assets/arrival.png";
+import closeIcon from "../../assets/close.png";
 
 import styles from "./RouteSummary.module.css";
 
@@ -9,14 +13,10 @@ interface RouteSummaryProps {
 }
 
 export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
-    const dep = trajectory.inferredAdepName
-        ? `${trajectory.inferredAdepName}${trajectory.inferredAdepIATA ? ` (${trajectory.inferredAdepIATA})` : ''}`
-        : trajectory.inferredAdep;
-
-    const arr = trajectory.inferredAdesName
-        ? `${trajectory.inferredAdesName}${trajectory.inferredAdesIATA ? ` (${trajectory.inferredAdesIATA})` : ''}`
-        : trajectory.inferredAdes;
-
+    const dep = trajectory.inferredAdepName || ""
+    const arr = trajectory.inferredAdesName || "";
+    const depIata = trajectory.inferredAdepIATA || "";
+    const arrIata = trajectory.inferredAdesIATA || "";
     const waypoints = trajectory.waypoints;
     const start = new Date(waypoints[0]?.time ?? 0);
     const end = new Date(waypoints[waypoints.length - 1]?.time ?? 0);
@@ -31,12 +31,34 @@ export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
 
     return (
         <div className={styles.routeSummary}>
-            <button onClick={onClose}>×</button>
+            <button className={styles.closeButton} onClick={onClose}>
+                <img src={closeIcon} alt="close" />
+            </button>
             <h4>Route Summary</h4>
             <ul>
                 <li><strong>Flight ID:</strong> {trajectory.id}</li>
-                <li><strong>From:</strong> {dep}</li>
-                <li><strong>To:</strong> {arr}</li>
+                <div className={styles.airportContainer}>
+
+                    <div className={styles.airport}>
+                        <div className={styles.airportCode}>
+                            <img src={departureIcon} alt="departure" />
+                            <h3 className="code">{depIata}</h3>
+                        </div>
+                        <div className="name">{dep}</div>
+                    </div>
+
+                    <div className={styles.arrow}>
+                        <img src={arrowImg} alt="arrow" />
+                    </div>
+
+                    <div className={styles.airport}>
+                        <div className={styles.airportCode}>
+                            <img src={arrivalIcon} alt="arrival" />
+                            <h3 className="code">{arrIata}</h3>
+                        </div>
+                        <div className="name">{arr}</div>
+                    </div>
+                </div>
                 <li><strong>Distance:</strong> {distance.toFixed(1)} km</li>
                 <strong>Duration:</strong> {hours} h {minutes} min
                 <li><strong>Avg Speed:</strong> {avgSpeed.toFixed(1)} km/h</li>

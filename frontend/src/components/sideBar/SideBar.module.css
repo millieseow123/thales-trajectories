@@ -71,8 +71,10 @@
   border-top: none;
   border-radius: 0 0 8px 8px;
   padding: 1rem;
-  max-height: 85vh;
+  max-height: 90vh;
   overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
   z-index: 1000;
   pointer-events: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
@@ -85,7 +87,7 @@
 .arrow {
   font-size: 1.2rem;
   color: #ccc;
-  transition: transform 0.2s ease;
+  cursor: pointer;
 }
 
 .sidebarHeader:hover .arrow {
@@ -114,15 +116,58 @@
 .sidebar li {
   margin-bottom: 4px;
 }
+
 .sidebar h3 {
   margin-top: 0;
   color: #fff;
 }
 
-.airportFilters {
+.flightSearchInput {
+  padding-block: 6px;
+  padding-left: 8px;
+  background-color: #1f1f1f;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.flightSearchInput::placeholder {
+  color: #aaa;
+}
+
+.flightIdSuggestions {
+  background-color: #1f1f1f;
+  border: 1px solid #444;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 4px;
+  margin-top: 2px;
+  position: absolute;
+  top: 20%;
+  z-index: 9999;
+  width: 100%;
+  font-size: 0.85rem;
+}
+
+.flightIdSuggestions li {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.flightIdSuggestions li:hover {
+  background-color: #333;
+}
+
+.filters {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.filters > h5 {
+  margin-bottom: 0.5rem;
 }
 
 .icon {
@@ -133,17 +178,30 @@
 .quickFilters {
   display: flex;
   gap: 8px;
-  margin-bottom: 10px;
 }
 
 .quickFilters button {
-  padding: 4px 8px;
-  font-size: 0.8rem;
-  background: #222;
+  padding: 4px 6px;
+  font-size: 0.7rem;
+  background-color: #2a2a2a;
+  color: #eee;
   border: 1px solid #444;
   color: white;
   border-radius: 12px;
   cursor: pointer;
+}
+
+.quickFilters button:hover {
+  background-color: #444;
+  color: #fff;
+}
+
+.quickFilters button.active {
+  background-color: #555;
+}
+
+.quickFilterText {
+  font-size: 0.6rem;
 }
 
 .dateContainer {

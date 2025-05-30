@@ -4,12 +4,13 @@ import type { Trajectory } from '../../../../shared/types/trajectory';
 import L from 'leaflet';
 
 import styles from './TrajectoryLayer.module.css';
-import { getOffset } from '../../utils/offset';
+import { getDecreasingOffset, getIncreasingOffset } from '../../utils/offset';
 
 interface TrajectoryLayerProps {
     trajectories: Trajectory[];
     hoveredIdRef: React.RefObject<number | null>;
     forceUpdate: () => void;
+    handlePolylineClick: (id: number) => void;
     zoomLevel: number;
     showAirportNames: boolean;
     setSelectedTrajectory: (traj: Trajectory) => void;
@@ -31,15 +32,17 @@ export default function TrajectoryLayer({ trajectories,
     hoveredIdRef,
     forceUpdate,
     zoomLevel,
+    handlePolylineClick,
     showAirportNames,
     setSelectedTrajectory,
     setSelectedTrajectoryId,
     selectedTrajectoryId,
     showIcaoLabels }: TrajectoryLayerProps) {
 
-    const offset = getOffset(zoomLevel);
-    const offsetCircle = (coords: [number, number], dx = 0.001): [number, number] => {
-        return [coords[0], coords[1] + dx];
+    const increasingOffset = getIncreasingOffset(zoomLevel);
+    const decreasingOffset = getDecreasingOffset(zoomLevel);
+    const offsetCircle = (coords: [number, number]): [number, number] => {
+        return [coords[0] + decreasingOffset, coords[1] + decreasingOffset];
     };
 
     const uniqueAirports = new Map<
@@ -70,7 +73,7 @@ export default function TrajectoryLayer({ trajectories,
                 const rawPositions = traj.waypoints.map(wp => [wp.latitude, wp.longitude] as [number, number]);
                 const dep = traj.inferredAdepCoords ?? rawPositions[0];
                 const arrBase = traj.inferredAdesCoords ?? rawPositions[rawPositions.length - 1]!;
-                const arr: [number, number] = [arrBase[0] + offset, arrBase[1] + offset];
+                const arr: [number, number] = [arrBase[0] + increasingOffset, arrBase[1] + increasingOffset];
                 const positions: [number, number][] = [
                     dep,
                     ...rawPositions.slice(1, -1),
@@ -90,9 +93,9 @@ export default function TrajectoryLayer({ trajectories,
                         }} positions={positions}
                             eventHandlers={{
                                 click: () => {
-                                    console.log(`Clicked trajectory ${traj.id}`);
                                     setSelectedTrajectory(traj);
                                     setSelectedTrajectoryId(traj.id);
+                                    handlePolylineClick(traj.id);
                                 },
                                 mouseover: () => {
                                     hoveredIdRef.current = traj.id;

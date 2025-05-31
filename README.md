@@ -39,7 +39,7 @@ thales-trajectories/
 ### 🛠 Prerequisites
 - Node.js >= 18
 - npm 
-- MySQL running locally (or a cloud DB)
+- MySQL running locally 
 
 ### 🔧 Database Seeding
 ```bash
@@ -67,15 +67,15 @@ npm run dev
 ```
 
 ### Features
-Interactive Leaflet map showing aircraft routes
-Recenter to current geolocation
-Clickable polylines with route summary (distance, duration, altitudes)
-Filter by:
+- Interactive Leaflet map showing aircraft routes
+- Recenter to current geolocation
+- Clickable polylines with route summary (distance, duration, altitudes)
+- Filter by:
+    - Flight ID search with dropdown suggestions
     - Departure & arrival airports
     - Time range (today, last 1h/24h, or custom)
-    - Flight ID search with dropdown suggestions
-ICAO/IATA toggle, airport name labels
-Smart polyline visibility based on map bounds
+- ICAO/IATA toggle, airport name labels
+- Smart polyline visibility based on map bounds
 
 ### Testing
 Basic unit tests are included for both frontend and backend.

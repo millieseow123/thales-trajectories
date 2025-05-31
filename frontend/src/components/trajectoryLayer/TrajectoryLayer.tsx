@@ -108,27 +108,67 @@ export default function TrajectoryLayer({ trajectories,
                             <Tooltip sticky className={styles.tooltip}>{`Flight ${traj.id}`}</Tooltip>
                         </Polyline>
 
-                        {zoomLevel >= 7 && showIcaoLabels && (
-                            <Marker position={dep} icon={createLabelIcon(traj.inferredAdep || traj.adep)} />
-                        )}
-                        <CircleMarker center={dep} radius={4} pathOptions={{ color: '#008000', fillOpacity: 0.7 }} >
-                            {zoomLevel < 7 && (<Tooltip sticky className={styles.tooltip}>
-                                {traj.inferredAdepName && traj.adepIATA
-                                    ? `${traj.inferredAdepName} (${traj.adepIATA})`
-                                    : traj.inferredAdep}
-                            </Tooltip>)}
-                        </CircleMarker>
+                        <>
+                            {showIcaoLabels && (
+                                <>
+                                    {zoomLevel >= 7 && (
+                                        <Marker
+                                            position={dep}
+                                            icon={createLabelIcon(traj.inferredAdep || traj.adep)}
+                                        />
+                                    )}
+                                </>
+                            )}
+                            <CircleMarker
+                                center={dep}
+                                radius={4}
+                                pathOptions={{ color: '#008000', fillOpacity: 0.7 }}
+                                className={styles.marker}
+                            >
+                              {!showAirportNames && <Tooltip
+                                    className={styles.tooltip}
+                                    direction="top"
+                                    offset={[0, -10]}
+                                    sticky
+                                >
+                                    {traj.inferredAdepName && traj.adepIATA
+                                        ? `${traj.inferredAdepName} (${traj.adepIATA})`
+                                        : traj.inferredAdepName}
+                                </Tooltip>}
+                            </CircleMarker>
+                        </>
 
-                        {zoomLevel >= 7 && showIcaoLabels && (
-                            <Marker position={arr} icon={createLabelIcon(traj.inferredAdes || traj.ades)} />
-                        )}
-                        <CircleMarker center={arr} radius={4} pathOptions={{ color: '#ff2d55', fillOpacity: 0.7 }} >
-                            {zoomLevel < 7 && (<Tooltip sticky className={styles.tooltip}>
-                                {traj.inferredAdesName && traj.adesIATA
-                                    ? `${traj.inferredAdesName} (${traj.adesIATA})`
-                                    : traj.inferredAdes}
-                            </Tooltip>)}
-                        </CircleMarker>
+
+                        <>
+                            {showIcaoLabels && (
+                                <>
+                                    {zoomLevel >= 7 && (
+                                        <Marker
+                                            position={arr}
+                                            icon={createLabelIcon(traj.inferredAdes || traj.ades)}
+                                        />
+                                    )}
+                                </>
+                            )}
+                            <CircleMarker
+                                center={arr}
+                                radius={4}
+                                pathOptions={{ color: '#ff2d55', fillOpacity: 0.7 }}
+                                className={styles.marker}
+                            >
+                                {!showAirportNames && <Tooltip
+                                    sticky
+                                    className={styles.tooltip}
+                                    direction="top"
+                                    offset={[0, -10]}
+                                    permanent={false}
+                                >
+                                    {traj.inferredAdesName && traj.adesIATA
+                                        ? `${traj.inferredAdesName} (${traj.adesIATA})`
+                                        : traj.inferredAdesName}
+                                </Tooltip>}
+                            </CircleMarker>
+                        </>
                     </div>
                 );
             })}

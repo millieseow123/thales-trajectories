@@ -36,6 +36,10 @@
   font-size: 1.2rem;
 }
 
+.collapsedHeader {
+  border-radius: 8px;
+}
+
 .arrow {
   color: #ccc;
   cursor: pointer;

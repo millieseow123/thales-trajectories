@@ -1,8 +1,9 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import Sidebar from './SideBar';
-import type { Trajectory } from '@shared/types/trajectory';
 import L from 'leaflet';
+import { CONSTANTS } from '@/constants/text';
+import type { Trajectory } from '@shared/types/trajectory';
+import Sidebar from './SideBar';
 
 const mockTrajectories: Trajectory[] = [
     {
@@ -50,26 +51,26 @@ describe('Sidebar', () => {
 
     it('renders all filter sections and legend', () => {
         render(<Sidebar {...defaultProps} />);
-        expect(screen.getByText(/Find Flights/i)).toBeInTheDocument();
-        expect(screen.getByText(/By Flight ID:/i)).toBeInTheDocument();
-        expect(screen.getByPlaceholderText(/Search Flight ID/i)).toBeInTheDocument();
-        expect(screen.getByText(/By Airport:/i)).toBeInTheDocument();
-        expect(screen.getByText(/By Time:/i)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.SIDEBAR.TITLE)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.SIDEBAR.FLIGHT_ID.LABEL)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(CONSTANTS.SIDEBAR.FLIGHT_ID.PLACEHOLDER)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.SIDEBAR.AIRPORT.LABEL)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.SIDEBAR.TIME.LABEL)).toBeInTheDocument();
 
-        expect(screen.getByText(/Today/i)).toBeInTheDocument();
-        expect(screen.getByText(/Last 1h/i)).toBeInTheDocument();
-        expect(screen.getByText(/Last 24h/i)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.TODAY)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.LAST_1H)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.LAST_24H)).toBeInTheDocument();
 
-        expect(screen.getByPlaceholderText(/Start Time/i)).toBeInTheDocument();
-        expect(screen.getByPlaceholderText(/End Time/i)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(CONSTANTS.SIDEBAR.TIME.START_TIME)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(CONSTANTS.SIDEBAR.TIME.END_TIME)).toBeInTheDocument();
 
-        expect(screen.getByLabelText(/ICAO Airport Code/i)).toBeInTheDocument();
-        expect(screen.getByLabelText(/Show Airport Name/i)).toBeInTheDocument();
+        expect(screen.getByLabelText(CONSTANTS.SIDEBAR.TOGGLES.SHOW_ICAO)).toBeInTheDocument();
+        expect(screen.getByLabelText(CONSTANTS.SIDEBAR.TOGGLES.SHOW_NAME)).toBeInTheDocument();
 
-        expect(screen.getByText(/Legend/i)).toBeInTheDocument();
-        expect(screen.getByText(/Departure Airport/i)).toBeInTheDocument();
-        expect(screen.getByText(/Arrival Airport/i)).toBeInTheDocument();
-        expect(screen.getByText(/ICAO Code/i)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.MAP_VIEW.LEGEND_TITLE)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.LEGEND.DEPARTURE)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.LEGEND.ARRIVAL)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.LEGEND.ICAO_CODE)).toBeInTheDocument();
 
         expect(document.querySelector('._greenMarker_ecab79')).toBeInTheDocument();
         expect(document.querySelector('._redMarker_ecab79')).toBeInTheDocument();
@@ -78,21 +79,21 @@ describe('Sidebar', () => {
 
     it('calls setShowAirportNames when toggling airport name checkbox', () => {
         render(<Sidebar {...defaultProps} />);
-        const checkbox = screen.getByLabelText(/Show Airport Name/i);
+        const checkbox = screen.getByLabelText(CONSTANTS.SIDEBAR.TOGGLES.SHOW_NAME);
         fireEvent.click(checkbox);
         expect(defaultProps.setShowAirportNames).toHaveBeenCalled();
     });
 
     it('calls setShowIcaoLabels when toggling ICAO code checkbox', () => {
         render(<Sidebar {...defaultProps} />);
-        const checkbox = screen.getByLabelText(/ICAO Airport Code/i);
+        const checkbox = screen.getByLabelText(CONSTANTS.SIDEBAR.TOGGLES.SHOW_ICAO);
         fireEvent.click(checkbox);
         expect(defaultProps.setShowIcaoLabels).toHaveBeenCalled();
     });
 
     it('calls setStartTime when clicking quick filter buttons', () => {
         render(<Sidebar {...defaultProps} />);
-        const todayBtn = screen.getByText(/Today/i);
+        const todayBtn = screen.getByText(CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.TODAY);
         fireEvent.click(todayBtn);
         expect(defaultProps.setStartTime).toHaveBeenCalled();
     });
@@ -102,7 +103,7 @@ describe('Sidebar', () => {
         const collapseBtn = screen.getByRole('button', { name: /collapse/i })
             || screen.getByAltText(/collapse/i);
         fireEvent.click(collapseBtn);
-        expect(screen.queryByText(/Find Flights/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(CONSTANTS.SIDEBAR.TITLE)).not.toBeInTheDocument();
     });
 
     it('calls all reset functions when Reset Filters is clicked', () => {
@@ -119,6 +120,6 @@ describe('Sidebar', () => {
 
     it('renders without crashing when trajectories is empty', () => {
         render(<Sidebar {...defaultProps} trajectories={[]} />);
-        expect(screen.getByText(/Find Flights/i)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.SIDEBAR.TITLE)).toBeInTheDocument();
     });
 });

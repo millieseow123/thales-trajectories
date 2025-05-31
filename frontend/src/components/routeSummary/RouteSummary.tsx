@@ -2,6 +2,7 @@ import arrowImg from '@/assets/arrow.png';
 import departureIcon from "@/assets/departure.png";
 import arrivalIcon from "@/assets/arrival.png";
 import closeIcon from "@/assets/close.png";
+import { CONSTANTS } from '@/constants/text';
 import type { Trajectory } from "@shared/types/trajectory";
 import { computeTotalDistance } from "@/utils/computeDistance";
 import styles from "./RouteSummary.module.css";
@@ -14,6 +15,7 @@ interface RouteSummaryProps {
 export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
     const dep = trajectory.inferredAdepName || ""
     const arr = trajectory.inferredAdesName || "";
+    console.log("xxx IATA ", trajectory.inferredAdepName)
     const depIata = trajectory.adepIATA || trajectory.inferredAdep;
     const arrIata = trajectory.adesIATA || trajectory.inferredAdes;
     const waypoints = trajectory.waypoints;
@@ -33,9 +35,9 @@ export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
             <button className={styles.closeButton} onClick={onClose}>
                 <img src={closeIcon} alt="close" />
             </button>
-            <h4>Route Summary</h4>
+            <h4>{CONSTANTS.ROUTE_SUMMARY.TITLE}</h4>
             <ul>
-                <li><strong>Flight ID:</strong> {trajectory.id}</li>
+                <li><strong>{CONSTANTS.ROUTE_SUMMARY.FLIGHT_ID}</strong> {trajectory.id}</li>
                 <div className={styles.airportContainer}>
 
                     <div className={styles.airport}>
@@ -58,10 +60,26 @@ export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
                         <div>{arr}</div>
                     </div>
                 </div>
-                <li><strong>Distance:</strong> {distance.toFixed(1)} km</li>
-                <li><strong>Duration:</strong> {hours} h {minutes} min</li>
-                <li><strong>Avg Speed:</strong> {avgSpeed.toFixed(1)} km/h</li>
-                <li><strong>Max Altitude:</strong> {maxAltitude} ft</li>
+                <li>
+                    <strong>
+                        {CONSTANTS.ROUTE_SUMMARY.DISTANCE}
+                    </strong> {distance.toFixed(1)} {CONSTANTS.ROUTE_SUMMARY.KM}
+                </li>
+                <li>
+                    <strong>
+                        {CONSTANTS.ROUTE_SUMMARY.DURATION}
+                    </strong> {hours} {CONSTANTS.ROUTE_SUMMARY.H} {minutes} {CONSTANTS.ROUTE_SUMMARY.MIN}
+                </li>
+                <li>
+                    <strong>
+                        {CONSTANTS.ROUTE_SUMMARY.AVG_SPEED}
+                    </strong> {avgSpeed.toFixed(1)} {CONSTANTS.ROUTE_SUMMARY.KM_PER_H}
+                </li>
+                <li>
+                    <strong>
+                        {CONSTANTS.ROUTE_SUMMARY.MAX_ALTITUDE}
+                    </strong> {maxAltitude} {CONSTANTS.ROUTE_SUMMARY.FT}
+                </li>
             </ul>
         </div>
     );

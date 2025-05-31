@@ -21,6 +21,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import MapView from './MapView';
 import type { Airport } from '@/utils/loadAirports';
+import { CONSTANTS } from '@/constants/text';
 
 describe('MapView', () => {
     beforeEach(() => {
@@ -47,9 +48,9 @@ describe('MapView', () => {
 
         render(<MapView />);
 
-        await screen.findByText(/Click on a flight route to view its summary/i);
+        await screen.findByText(CONSTANTS.MAP_VIEW.HINT);
         expect(document.querySelector('.leaflet-container')).toBeInTheDocument();
-        expect(screen.getByText(/Find Flights/i)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.SIDEBAR.TITLE)).toBeInTheDocument();
         expect(screen.getByAltText(/Recenter/i)).toBeInTheDocument();
         const zoomInButtons = screen.getAllByTitle(/Zoom in/i);
         expect(zoomInButtons.length).toBeGreaterThan(0);
@@ -62,7 +63,7 @@ describe('MapView', () => {
     it('shows loading spinner while fetching data', async () => {
         render(<MapView />);
         expect(screen.getByTestId('spinner')).toBeInTheDocument();
-        await screen.findByText(/Click on a flight route to view its summary/i);
+        await screen.findByText(CONSTANTS.MAP_VIEW.HINT);
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
 

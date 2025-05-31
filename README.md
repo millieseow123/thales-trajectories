@@ -45,6 +45,7 @@ thales-trajectories/
 ```bash
 CREATE DATABASE trajectories_db;
 USE trajectories_db;
+
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_mysql_password
@@ -58,6 +59,7 @@ cd backend
 npm install
 npx ts-node src/server.ts
 ```
+Your backend will run on: [http://localhost:4000](http://localhost:4000)
 
 ### 🔧 Frontend Setup
 ```bash
@@ -65,6 +67,8 @@ cd frontend
 npm install
 npm run dev
 ```
+Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
+
 
 ### Features
 - Interactive Leaflet map showing aircraft routes
@@ -78,11 +82,21 @@ npm run dev
 - Smart polyline visibility based on map bounds
 
 ### Testing
-Basic unit tests are included for both frontend and backend.
-Backend tests: jest (WIP)
-Frontend tests: vitest for component/data utilities
+Basic unit tests are included for both frontend and backend:
 
+- **Frontend tests**: Written with [`vitest`](https://vitest.dev/) for component and utility logic
+- **Backend tests**: Written with [`jest`](https://jestjs.io/) for API and data-loading logic
+
+### Running Frontend Tests
 ```bash
 cd frontend
+npm install
+npm run test
+```
+
+### Running Backend Tests
+```bash
+cd backend
+npm install
 npm run test
 ```

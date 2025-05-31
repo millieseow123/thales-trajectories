@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker';
 import expandIconUrl from '@/assets/expand.png';
 import collapseIconUrl from '@/assets/collapse.png';
 import resetIconUrl from '@/assets/reset.png';
-import { TEXT } from '@/constants/text';
+import { CONSTANTS } from '@/constants/text';
 import Legend from '@/components/legend/Legend';
 import type { Trajectory } from '@shared/types/trajectory';
 import { groupAirportsByCountry } from '@/utils/groupAirportsByCountry';
@@ -120,7 +120,7 @@ export default function Sidebar({
 
     return (
         <div ref={sidebarRef} className={styles.sidebarContainer}>
-            <div className={styles.sidebarHeader}>
+            <div className={`${styles.sidebarHeader} ${isCollapsed ? styles.collapsedHeader : ''}`}>
                 <button className={styles.arrow} onClick={() => setIsCollapsed(!isCollapsed)}>
                     {isCollapsed ?
                         <img src={expandIconUrl} alt="expand" className={styles.icon} />
@@ -134,7 +134,7 @@ export default function Sidebar({
                 <div className={styles.sidebar} onMouseEnter={() => mapRef.current?.scrollWheelZoom.disable()}
                     onMouseLeave={() => mapRef.current?.scrollWheelZoom.enable()}>
                     <div className={styles.sidebarTitle}>
-                        <h4>{TEXT.sidebar.title}</h4>
+                        <h4>{CONSTANTS.SIDEBAR.TITLE}</h4>
                         <button
                             className={styles.clearButton}
                             onClick={() => {
@@ -145,7 +145,7 @@ export default function Sidebar({
                                 setStartTime(null);
                                 setEndTime(null);
                             }}
-                            title={TEXT.sidebar.clearFiltersTooltip}
+                            title={CONSTANTS.SIDEBAR.CLEAR_FILTERS_TOOLTIP}
                         >
 
                             <img src={resetIconUrl} alt="Reset filters" />
@@ -159,7 +159,7 @@ export default function Sidebar({
                             <div className={styles.flightSearchContainer}>
                                 <input
                                     type="text"
-                                    placeholder={TEXT.sidebar.flightId.placeholder}
+                                    placeholder={CONSTANTS.SIDEBAR.FLIGHT_ID.PLACEHOLDER}
                                     value={flightIdFilter}
                                     onChange={(e) => {
                                         const query = e.target.value;
@@ -215,7 +215,7 @@ export default function Sidebar({
                         </div>
 
                         <div className={styles.filters}>
-                            <h5>{TEXT.sidebar.airport.label}</h5>
+                            <h5>{CONSTANTS.SIDEBAR.AIRPORT.LABEL}</h5>
                             <Select
                                 menuPortalTarget={document.body}
                                 styles={customStyles}
@@ -228,7 +228,7 @@ export default function Sidebar({
                                 onChange={(selected) =>
                                     setAdepFilter(selected?.value || '')
                                 }
-                                placeholder={TEXT.sidebar.airport.departure}
+                                placeholder={CONSTANTS.SIDEBAR.AIRPORT.DEPARTURE}
                                 isClearable
                                 className={styles.select}
                                 classNamePrefix="select"
@@ -245,7 +245,7 @@ export default function Sidebar({
                                     .find(opt => opt.value === adesFilter) || null}
                                 onChange={(opt) => setAdesFilter(opt?.value || '')}
                                 filterOption={() => true}
-                                placeholder={TEXT.sidebar.airport.arrival}
+                                placeholder={CONSTANTS.SIDEBAR.AIRPORT.ARRIVAL}
                                 isClearable
                                 className={styles.select}
                                 classNamePrefix="select"
@@ -253,7 +253,7 @@ export default function Sidebar({
                         </div>
 
                         <div className={styles.filters}>
-                            <h5>{TEXT.sidebar.time.label}</h5>
+                            <h5>{CONSTANTS.SIDEBAR.TIME.LABEL}</h5>
                             <div className={styles.quickFilters}>
                                 <button
                                     className={selectedTimeFilter === 'today' ? styles.active : ''}
@@ -272,7 +272,7 @@ export default function Sidebar({
                                             setStartTime(now);
                                         }
                                     }}>
-                                    {TEXT.sidebar.time.quickFilters.today}
+                                    {CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.TODAY}
                                 </button>
                                 <button
                                     className={selectedTimeFilter === '1h' ? styles.active : ''}
@@ -286,7 +286,7 @@ export default function Sidebar({
                                             setStartTime(last1h);
                                         }
                                     }}>
-                                    {TEXT.sidebar.time.quickFilters.last1h}
+                                    {CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.LAST_1H}
                                 </button>
                                 <button
                                     className={selectedTimeFilter === '24h' ? styles.active : ''}
@@ -300,7 +300,7 @@ export default function Sidebar({
                                             setStartTime(last24h);
                                         }
                                     }}>
-                                    {TEXT.sidebar.time.quickFilters.last24h}
+                                    {CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.LAST_24H}
                                 </button>
                             </div>
 
@@ -343,7 +343,7 @@ export default function Sidebar({
                                 onChange={(e) => setShowIcaoLabels(e.target.checked)}
                                 disabled={zoomLevel < 7}
                             />
-                            {TEXT.sidebar.toggles.showIcao}
+                            {CONSTANTS.SIDEBAR.TOGGLES.SHOW_ICAO}
                         </label>
                         <label className={styles.checkbox}>
                             <input
@@ -351,7 +351,7 @@ export default function Sidebar({
                                 checked={showAirportNames}
                                 onChange={(e) => setShowAirportNames(e.target.checked)}
                             />
-                            {TEXT.sidebar.toggles.showName}
+                            {CONSTANTS.SIDEBAR.TOGGLES.SHOW_NAME}
                         </label>
                     </div>
 

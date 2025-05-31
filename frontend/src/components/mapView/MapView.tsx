@@ -7,6 +7,7 @@ import { RecenterButton } from '@/components/recenter/Recenter';
 import { RouteSummary } from '@/components/routeSummary/RouteSummary';
 import Sidebar from '@/components/sideBar/SideBar';
 import TrajectoryLayer from '@/components/trajectoryLayer/TrajectoryLayer';
+import { CONSTANTS } from '@/constants/text';
 import { useTrajectories } from '@/hooks/useTrajectories';
 import type { Trajectory } from '@shared/types/trajectory';
 import styles from './MapView.module.css';
@@ -69,7 +70,7 @@ export default function MapView() {
     }, [trajectories, selectedFlightId, adepFilter, adesFilter, startTime, endTime, mapBounds, selectedTrajectoryId]);
 
     if (loading) return <LoadingSpinner />;
-    if (error) return <div>Error loading data</div>;
+    if (error) return <div>{CONSTANTS.MAP_VIEW.ERROR}</div>;
 
     function ZoomTracker({
         onZoomChange,
@@ -102,7 +103,7 @@ export default function MapView() {
         >
             {showHint && (
                 <div className={styles.hint}>
-                    Click on a flight route to view its summary
+                    {CONSTANTS.MAP_VIEW.HINT}
                 </div>
             )}
 

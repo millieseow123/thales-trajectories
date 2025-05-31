@@ -1,36 +1,54 @@
-export const TEXT = {
-    sidebar: {
-        title: 'Find Flights',
-        clearFiltersTooltip: 'Clear all filters',
-        flightId: {
-            label: 'By Flight ID:',
-            placeholder: 'Search Flight ID',
+export const CONSTANTS = {
+    SIDEBAR: {
+        TITLE: 'Find Flights',
+        CLEAR_FILTERS_TOOLTIP: 'Clear all filters',
+        FLIGHT_ID: {
+            LABEL: 'By Flight ID:',
+            PLACEHOLDER: 'Search Flight ID',
         },
-        airport: {
-            label: 'By Airport:',
-            departure: 'Select Departure',
-            arrival: 'Select Arrival',
+        AIRPORT: {
+            LABEL: 'By Airport:',
+            DEPARTURE: 'Select Departure',
+            ARRIVAL: 'Select Arrival',
         },
-        time: {
-            label: 'By Time:',
-            startTime: 'Start Time',
-            endTime: 'End Time',
-            quickFilters: {
-                today: 'Today',
-                last1h: 'Last 1h',
-                last24h: 'Last 24h',
+        TIME: {
+            LABEL: 'By Time:',
+            START_TIME: 'Start Time',
+            END_TIME: 'End Time',
+            QUICK_FILTERS: {
+                TODAY: 'Today',
+                LAST_1H: 'Last 1h',
+                LAST_24H: 'Last 24h',
             },
         },
-        toggles: {
-            showIcao: 'ICAO Airport Code',
-            showName: 'Show Airport Name',
+        TOGGLES: {
+            SHOW_ICAO: 'ICAO Airport Code',
+            SHOW_NAME: 'Show Airport Name',
         },
     },
-
-    mapView: {
-        legendTitle: 'Legend',
-        departure: 'Departure Airport',
-        arrival: 'Arrival Airport',
-        icaoCode: 'ICAO Code',
+    MAP_VIEW: {
+        LEGEND_TITLE: 'Legend',
+        HINT: 'Cick on a flight route to view its summary',
+        ERROR: 'Error loading data',
     },
+    ROUTE_SUMMARY: {
+        TITLE: "Route Summary",
+        FLIGHT_ID: "Flight ID:",
+        DISTANCE: "Distance:",
+        DURATION: "Duration:",
+        AVG_SPEED: "Avg Speed:",
+        MAX_ALTITUDE: "Max Altitude:",
+        KM: "km",
+        H: 'h',
+        MIN: "min",
+        KM_PER_H: "km/h",
+        FT: "ft",
+    },
+    LEGEND: {
+        TITLE: 'Legend',
+        DEPARTURE: 'Departure Airport',
+        ARRIVAL: 'Arrival Airport',
+        SAMPLE_ICAO: 'WSSS',
+        ICAO_CODE: 'ICAO Code',
+    }
 };

@@ -1,8 +1,9 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { RouteSummary } from './RouteSummary';
+import { CONSTANTS } from '@/constants/text';
 import type { Trajectory } from '@shared/types/trajectory';
 import { computeTotalDistance } from '@/utils/computeDistance';
+import { RouteSummary } from './RouteSummary';
 
 const mockTrajectory: Partial<Trajectory> = {
     id: 123,
@@ -20,17 +21,17 @@ describe('RouteSummary', () => {
     it('renders all route summary info', () => {
         const onClose = vi.fn();
         render(<RouteSummary trajectory={mockTrajectory as Trajectory} onClose={onClose} />);
-        
-        expect(screen.getByText(/Route Summary/i)).toBeInTheDocument();
-        expect(screen.getByText(/Flight ID:/i)).toBeInTheDocument();
+
+        expect(screen.getByText(CONSTANTS.ROUTE_SUMMARY.TITLE)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.ROUTE_SUMMARY.FLIGHT_ID)).toBeInTheDocument();
         expect(screen.getByAltText(/arrow/i)).toBeInTheDocument();
         expect(screen.getByAltText(/departure/i)).toBeInTheDocument();
         expect(screen.getByAltText(/arrival/i)).toBeInTheDocument();
-        expect(screen.getByText('123')).toBeInTheDocument();
-        expect(screen.getByText('Singapore Changi')).toBeInTheDocument();
-        expect(screen.getByText('Tokyo Haneda')).toBeInTheDocument();
-        expect(screen.getByText('SIN')).toBeInTheDocument();
-        expect(screen.getByText('HND')).toBeInTheDocument();
+        expect(screen.getByText(String(mockTrajectory.id))).toBeInTheDocument();
+        expect(screen.getByText(mockTrajectory.inferredAdepName!)).toBeInTheDocument();
+        expect(screen.getByText(mockTrajectory.inferredAdesName!)).toBeInTheDocument();
+        expect(screen.getByText(mockTrajectory.adepIATA!)).toBeInTheDocument();
+        expect(screen.getByText(mockTrajectory.adesIATA!)).toBeInTheDocument();
 
         const waypoints = mockTrajectory.waypoints ?? [];
         const distance = computeTotalDistance(waypoints);
@@ -45,14 +46,14 @@ describe('RouteSummary', () => {
 
         const altitudes = waypoints.map(wp => wp.altitude).filter(a => a !== undefined);
         const maxAltitude = altitudes.length > 0 ? Math.max(...altitudes) : 0;
-        expect(screen.getByText(`${distance.toFixed(1)} km`)).toBeInTheDocument();
-        expect(screen.getByText(`${hours.toString()} h ${minutes.toString()} min`)).toBeInTheDocument();
-        expect(screen.getByText(`${avgSpeed} km/h`)).toBeInTheDocument();
-        expect(screen.getByText(`${maxAltitude.toString()} ft`)).toBeInTheDocument();
-        expect(screen.getByText(/Distance:/i)).toBeInTheDocument();
-        expect(screen.getByText(/Duration:/i)).toBeInTheDocument();
-        expect(screen.getByText(/Avg Speed:/i)).toBeInTheDocument();
-        expect(screen.getByText(/Max Altitude:/i)).toBeInTheDocument();
+        expect(screen.getByText(`${distance.toFixed(1)} ${CONSTANTS.ROUTE_SUMMARY.KM}`)).toBeInTheDocument();
+        expect(screen.getByText(`${hours.toString()} ${CONSTANTS.ROUTE_SUMMARY.H} ${minutes.toString()} ${CONSTANTS.ROUTE_SUMMARY.MIN}`)).toBeInTheDocument();
+        expect(screen.getByText(`${avgSpeed} ${CONSTANTS.ROUTE_SUMMARY.KM_PER_H}`)).toBeInTheDocument();
+        expect(screen.getByText(`${maxAltitude.toString()} ${CONSTANTS.ROUTE_SUMMARY.FT}`)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.ROUTE_SUMMARY.DISTANCE)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.ROUTE_SUMMARY.DURATION)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.ROUTE_SUMMARY.AVG_SPEED)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.ROUTE_SUMMARY.MAX_ALTITUDE)).toBeInTheDocument();
     });
 
     it('calls onClose when close button is clicked', () => {
@@ -69,7 +70,7 @@ describe('RouteSummary', () => {
             waypoints: []
         };
         render(<RouteSummary trajectory={incompleteTrajectory as Trajectory} onClose={() => { }} />);
-        expect(screen.getByText('456')).toBeInTheDocument();
+        expect(screen.getByText(incompleteTrajectory.id!)).toBeInTheDocument();
         expect(screen.getAllByText('')).toBeTruthy();
         expect(screen.getByText(/0 h 0 min/i)).toBeInTheDocument();
         expect(screen.getByText(/0.0 km/i)).toBeInTheDocument();

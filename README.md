@@ -38,10 +38,10 @@ thales-trajectories/
 
 ### 🛠 Prerequisites
 - Node.js >= 18
-- npm (or yarn)
-<!-- - MySQL running locally (or a cloud DB) -->
+- npm 
+- MySQL running locally (or a cloud DB)
 
-<!-- ### 🔧 Database Seeding
+### 🔧 Database Seeding
 ```bash
 CREATE DATABASE trajectories_db;
 USE trajectories_db;
@@ -50,7 +50,7 @@ DB_USER=root
 DB_PASSWORD=your_mysql_password
 DB_NAME=trajectories_db
 npx ts-node scripts/seedTrajectories.ts
-``` -->
+```
 
 ### 🔧 Backend Setup
 ```bash

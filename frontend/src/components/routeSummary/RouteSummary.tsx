@@ -1,10 +1,9 @@
-import type { Trajectory } from "../../../../shared/types/trajectory";
-import { computeTotalDistance } from "../../utils/computeDistance";
-import arrowImg from '../../assets/arrow.png';
-import departureIcon from "../../assets/departure.png";
-import arrivalIcon from "../../assets/arrival.png";
-import closeIcon from "../../assets/close.png";
-
+import type { Trajectory } from "@shared/types/trajectory";
+import arrowImg from '@/assets/arrow.png';
+import departureIcon from "@/assets/departure.png";
+import arrivalIcon from "@/assets/arrival.png";
+import closeIcon from "@/assets/close.png";
+import { computeTotalDistance } from "@/utils/computeDistance";
 import styles from "./RouteSummary.module.css";
 
 interface RouteSummaryProps {
@@ -15,8 +14,8 @@ interface RouteSummaryProps {
 export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
     const dep = trajectory.inferredAdepName || ""
     const arr = trajectory.inferredAdesName || "";
-    const depIata = trajectory.inferredAdepIATA || "";
-    const arrIata = trajectory.inferredAdesIATA || "";
+    const depIata = trajectory.adepIATA || trajectory.inferredAdep;
+    const arrIata = trajectory.adesIATA || trajectory.inferredAdes;
     const waypoints = trajectory.waypoints;
     const start = new Date(waypoints[0]?.time ?? 0);
     const end = new Date(waypoints[waypoints.length - 1]?.time ?? 0);
@@ -42,9 +41,9 @@ export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
                     <div className={styles.airport}>
                         <div className={styles.airportCode}>
                             <img src={departureIcon} alt="departure" />
-                            <h3 className="code">{depIata}</h3>
+                            <h3>{depIata}</h3>
                         </div>
-                        <div className="name">{dep}</div>
+                        <div>{dep}</div>
                     </div>
 
                     <div className={styles.arrow}>
@@ -54,13 +53,13 @@ export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
                     <div className={styles.airport}>
                         <div className={styles.airportCode}>
                             <img src={arrivalIcon} alt="arrival" />
-                            <h3 className="code">{arrIata}</h3>
+                            <h3>{arrIata}</h3>
                         </div>
-                        <div className="name">{arr}</div>
+                        <div>{arr}</div>
                     </div>
                 </div>
                 <li><strong>Distance:</strong> {distance.toFixed(1)} km</li>
-                <strong>Duration:</strong> {hours} h {minutes} min
+                <li><strong>Duration:</strong> {hours} h {minutes} min</li>
                 <li><strong>Avg Speed:</strong> {avgSpeed.toFixed(1)} km/h</li>
                 <li><strong>Max Altitude:</strong> {maxAltitude} ft</li>
             </ul>

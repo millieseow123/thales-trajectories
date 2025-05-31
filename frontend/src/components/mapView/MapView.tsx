@@ -1,15 +1,14 @@
-import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
+import L from 'leaflet';
+import { MapContainer, useMapEvents, TileLayer, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { useTrajectories } from '../../hooks/useTrajectories';
-import Sidebar from '../sideBar/SideBar';
-import { useMapEvents } from 'react-leaflet';
-import LoadingSpinner from '../loadingSpinner/LoadingSpinner';
-import TrajectoryLayer from '../trajectoryLayer/TrajectoryLayer';
-import { RecenterButton } from '../recenter/Recenter';
-import L from 'leaflet';
-import type { Trajectory } from '../../../../shared/types/trajectory';
-import { RouteSummary } from '../routeSummary/RouteSummary';
+import { useTrajectories } from '@/hooks/useTrajectories';
+import LoadingSpinner from '@/components/loadingSpinner/LoadingSpinner';
+import Sidebar from '@/components/sideBar/SideBar';
+import { RecenterButton } from '@/components/recenter/Recenter';
+import { RouteSummary } from '@/components/routeSummary/RouteSummary';
+import TrajectoryLayer from '@/components/trajectoryLayer/TrajectoryLayer';
+import type { Trajectory } from '@shared/types/trajectory';
 import styles from './MapView.module.css';
 
 export default function MapView() {
@@ -96,10 +95,10 @@ export default function MapView() {
             center={[1.35, 103.82]}
             zoom={5}
             zoomControl={false}
-            style={{ height: '100vh', width: '100%' }}
             ref={(node) => {
                 if (node) mapRef.current = node;
             }}
+            className={styles.mapContainer}
         >
             {showHint && (
                 <div className={styles.hint}>
@@ -116,8 +115,8 @@ export default function MapView() {
             <RecenterButton />
             <ZoomControl position="bottomright" />
 
-            <TrajectoryLayer 
-            trajectories={filteredTrajectories}
+            <TrajectoryLayer
+                trajectories={filteredTrajectories}
                 hoveredIdRef={hoveredIdRef}
                 forceUpdate={forceUpdate}
                 zoomLevel={zoomLevel}

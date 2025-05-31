@@ -1,18 +1,17 @@
 import Select from 'react-select';
-
+import 'react-datepicker/dist/react-datepicker.css';
 import styles from './Sidebar.module.css';
-import type { Trajectory } from '../../../../shared/types/trajectory';
+import type { Trajectory } from '@shared/types/trajectory';
 import { useEffect, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import Legend from '../legend/Legend';
-import expandIconUrl from '../../assets/expand.png';
-import collapseIconUrl from '../../assets/collapse.png';
-import resetIconUrl from '../../assets/reset.png';
+import Legend from '@/components/legend/Legend';
+import expandIconUrl from '@/assets/expand.png';
+import collapseIconUrl from '@/assets/collapse.png';
+import resetIconUrl from '@/assets/reset.png';
 import L from 'leaflet';
 import { customStyles } from './selectStyles'
-import { groupAirportsByCountry } from '../../utils/groupAirportsByCountry';
-import type { Airport } from '../../utils/groupAirportsByCountry';
+import { groupAirportsByCountry } from '@/utils/groupAirportsByCountry';
+import type { Airport } from '@/utils/groupAirportsByCountry';
 
 interface SidebarProps {
     mapRef: React.RefObject<L.Map | null>;
@@ -99,6 +98,24 @@ export default function Sidebar({
         };
     }, []);
 
+    useEffect(() => {
+        const map = mapRef.current;
+        const input = document.querySelector('.' + styles.flightSearchInput);
+
+        if (!map || !input) return;
+
+        const handleMouseEnter = () => map.dragging.disable();
+        const handleMouseLeave = () => map.dragging.enable();
+
+        input.addEventListener('mouseenter', handleMouseEnter);
+        input.addEventListener('mouseleave', handleMouseLeave);
+
+        return () => {
+            input.removeEventListener('mouseenter', handleMouseEnter);
+            input.removeEventListener('mouseleave', handleMouseLeave);
+        };
+    }, [mapRef]);
+
 
     return (
         <div ref={sidebarRef} className={styles.sidebarContainer}>
@@ -130,44 +147,71 @@ export default function Sidebar({
                             title="Clear all filters"
                         >
 
-                            <img src={resetIconUrl} alt="Reset filters" style={{ width: 16, height: 16 }} />
+                            <img src={resetIconUrl} alt="Reset filters" />
                         </button>
                     </div>
 
-                    <div className={styles.filters}>
+                    <div className={styles.filterContainer}>
+                        <div className={styles.filters}>
 
-                        <h5>By Flight:</h5>
-                        <input
-                            type="text"
-                            placeholder="Search Flight ID"
-                            value={flightIdFilter}
-                            onChange={(e) => {
-                                const query = e.target.value;
-                                setFlightIdFilter(query);
-                                const matches = trajectories
-                                    .filter(t => t.id.toString().includes(query))
-                                    .map(t => `#${t.id} – ${t.inferredAdep || t.adep} → ${t.inferredAdes || t.ades}`);
-                                setFlightSuggestions(matches);
-                            }}
-                            className={styles.flightSearchInput}
-                        />
+                            <h5>By Flight ID:</h5>
+                            <div className={styles.flightSearchContainer}>
+                                <input
+                                    type="text"
+                                    placeholder="Search Flight ID"
+                                    value={flightIdFilter}
+                                    onChange={(e) => {
+                                        const query = e.target.value;
+                                        setFlightIdFilter(query);
 
-                        {flightIdFilter && flightSuggestions.length > 0 && (
-                            <ul className={styles.flightIdSuggestions}>
-                                {flightSuggestions.map((s, i) => (
-                                    <li key={i} onClick={() => {
-                                        const id = s.match(/\d+/)?.[0];
-                                        if (id) {
-                                            setFlightIdFilter(id);
-                                            setSelectedFlightId(Number(id));
+                                        if (query === '') {
+                                            setSelectedFlightId(null);
                                             setFlightSuggestions([]);
-                                        }
-                                    }}>
-                                        {s}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
+                                            return;
+                                          }
+
+                                        const matches = trajectories
+                                            .filter(t => t.id.toString().includes(query))
+                                            .map(t => `#${t.id} – ${t.inferredAdep || t.adep} → ${t.inferredAdes || t.ades}`);
+                                        setFlightSuggestions(matches);
+                                    }}
+                                    onBlur={() => {
+                                        setTimeout(() => setFlightSuggestions([]), 200);
+                                    }}
+                                    className={styles.flightSearchInput}
+                                />
+
+                                {flightIdFilter && (
+                                    <button
+                                        className={styles.clearInputBtn}
+                                        onClick={() => {
+                                            setFlightIdFilter('');
+                                            setSelectedFlightId(null);
+                                        }}
+                                        title="Clear"
+                                    >
+                                        ×
+                                    </button>
+                                )}
+                            </div>
+
+                            {flightIdFilter && flightSuggestions.length > 0 && (
+                                <ul className={styles.flightIdSuggestions}>
+                                    {flightSuggestions.map((s, i) => (
+                                        <li key={i} onClick={() => {
+                                            const id = s.match(/\d+/)?.[0];
+                                            if (id) {
+                                                setFlightIdFilter(id);
+                                                setSelectedFlightId(Number(id));
+                                                setFlightSuggestions([]);
+                                            }
+                                        }}>
+                                            {s}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
 
                         <div className={styles.filters}>
                             <h5>By Airport:</h5>
@@ -206,80 +250,86 @@ export default function Sidebar({
                                 classNamePrefix="select"
                             />
                         </div>
-                    </div>
-                    <div className={styles.filters}>
-                        <h5>By Time:</h5>
-                        <div className={styles.quickFilters}>
-                            <button
-                                className={selectedTimeFilter === 'today' ? styles.active : ''}
-                                onClick={() => {
-                                    const now = new Date();
-                                    if (
-                                        startTime &&
-                                        startTime.getDate() === now.getDate() &&
-                                        startTime.getMonth() === now.getMonth() &&
-                                        startTime.getFullYear() === now.getFullYear()
-                                    ) {
-                                        setStartTime(null);
-                                        setSelectedTimeFilter('');
-                                    } else {
-                                        setSelectedTimeFilter('today');
-                                        setStartTime(now);
-                                    }
-                                }}>
-                                Today</button>
-                            <button
-                                className={selectedTimeFilter === '1h' ? styles.active : ''}
-                                onClick={() => {
-                                    const last1h = new Date(Date.now() - 60 * 60 * 1000);
-                                    if (startTime && Math.abs(startTime.getTime() - last1h.getTime()) < 60000) {
-                                        setStartTime(null);
-                                        setSelectedTimeFilter('');
-                                    } else {
-                                        setSelectedTimeFilter('1h');
-                                        setStartTime(last1h);
-                                    }
-                                }}>Last 1h</button>
-                            <button
-                                className={selectedTimeFilter === '24h' ? styles.active : ''}
-                                onClick={() => {
-                                    const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
-                                    if (startTime && Math.abs(startTime.getTime() - last24h.getTime()) < 60000) {
-                                        setStartTime(null);
-                                        setSelectedTimeFilter('');
-                                    } else {
-                                        setSelectedTimeFilter('24h');
-                                        setStartTime(last24h);
-                                    }
-                                }}>Last 24h</button>
+
+                        <div className={styles.filters}>
+                            <h5>By Time:</h5>
+                            <div className={styles.quickFilters}>
+                                <button
+                                    className={selectedTimeFilter === 'today' ? styles.active : ''}
+                                    onClick={() => {
+                                        const now = new Date();
+                                        if (
+                                            startTime &&
+                                            startTime.getDate() === now.getDate() &&
+                                            startTime.getMonth() === now.getMonth() &&
+                                            startTime.getFullYear() === now.getFullYear()
+                                        ) {
+                                            setStartTime(null);
+                                            setSelectedTimeFilter('');
+                                        } else {
+                                            setSelectedTimeFilter('today');
+                                            setStartTime(now);
+                                        }
+                                    }}>
+                                    Today</button>
+                                <button
+                                    className={selectedTimeFilter === '1h' ? styles.active : ''}
+                                    onClick={() => {
+                                        const last1h = new Date(Date.now() - 60 * 60 * 1000);
+                                        if (startTime && Math.abs(startTime.getTime() - last1h.getTime()) < 60000) {
+                                            setStartTime(null);
+                                            setSelectedTimeFilter('');
+                                        } else {
+                                            setSelectedTimeFilter('1h');
+                                            setStartTime(last1h);
+                                        }
+                                    }}>Last 1h</button>
+                                <button
+                                    className={selectedTimeFilter === '24h' ? styles.active : ''}
+                                    onClick={() => {
+                                        const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                                        if (startTime && Math.abs(startTime.getTime() - last24h.getTime()) < 60000) {
+                                            setStartTime(null);
+                                            setSelectedTimeFilter('');
+                                        } else {
+                                            setSelectedTimeFilter('24h');
+                                            setStartTime(last24h);
+                                        }
+                                    }}>Last 24h</button>
+                            </div>
+
+                            <div className={styles.dateContainer}>
+                                <DatePicker
+                                    selected={startTime}
+                                    onChange={(date) => setStartTime(date)}
+                                    showTimeSelect
+                                    showMonthDropdown
+                                    showYearDropdown
+                                    dropdownMode="select"
+                                    dateFormat="dd MMM HH:mm"
+                                    placeholderText="Start Time"
+                                    portalId="root"
+                                    popperPlacement="bottom-end" />
+
+                                <DatePicker
+                                    selected={endTime}
+                                    onChange={(date) => setEndTime(date)}
+                                    showTimeSelect
+                                    showMonthDropdown
+                                    showYearDropdown
+                                    dropdownMode="select"
+                                    dateFormat="dd MMM HH:mm"
+                                    placeholderText="End Time"
+                                    portalId="root"
+                                    popperPlacement="bottom-end"
+                                />
+
+                            </div>
                         </div>
-
-                        <div className={styles.dateContainer}>
-                            <DatePicker
-                                selected={startTime}
-                                onChange={(date) => setStartTime(date)}
-                                showTimeSelect
-                                dateFormat="Pp"
-                                placeholderText="Start Time"
-                                portalId="root"
-                                popperPlacement="bottom-end" />
-
-                            <DatePicker
-                                selected={endTime}
-                                onChange={(date) => setEndTime(date)}
-                                showTimeSelect
-                                dateFormat="Pp"
-                                placeholderText="End Time"
-                                portalId="root"
-                                popperPlacement="bottom-end"
-                            />
-
-                        </div>
                     </div>
-
                     <hr className={styles.divider} />
 
-                    <div>
+                    <div className={styles.options}>
                         <label className={styles.checkbox} title={zoomLevel < 7 ? "Zoom in to show ICAO codes" : ""}>
                             <input
                                 type="checkbox"
@@ -289,7 +339,6 @@ export default function Sidebar({
                             />
                             ICAO Airport Code
                         </label>
-
                         <label className={styles.checkbox}>
                             <input
                                 type="checkbox"
@@ -304,7 +353,8 @@ export default function Sidebar({
 
                     <Legend />
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 }

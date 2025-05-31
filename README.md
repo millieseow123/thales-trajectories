@@ -16,6 +16,7 @@ The app displays flight paths as colored polylines, with markers and popups for 
 
 ## 📦 Project Structure
 
+```bash
 thales-trajectories/
 ├── backend/                  # Express API backend
 │   ├── src/
@@ -31,8 +32,7 @@ thales-trajectories/
 │
 ├── shared/                   # Shared TypeScript types
 └── test-data/                # Edge-case samples for test coverage
-
----
+```
 
 ## 🚀 How to Run the Project
 

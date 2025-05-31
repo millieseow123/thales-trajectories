@@ -1,19 +1,17 @@
 import { useMap } from 'react-leaflet';
-import recenterIcon from '../../assets/recenter.png';
+import recenterIcon from '@/assets/recenter.png';
 import styles from './Recenter.module.css';
 
 export function RecenterButton() {
     const map = useMap();
 
     const handleClick = () => {
-        console.log('>> ', navigator.geolocation);
         if (!navigator.geolocation) return;
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 map.setView([position.coords.latitude, position.coords.longitude], 12);
             },
-            (error) => {
-                console.error('❌ Error fetching location:', error);
+            (_) => {
                 alert('Unable to fetch your location');
             },
             {

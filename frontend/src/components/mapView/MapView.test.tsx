@@ -1,14 +1,29 @@
+const mockAirports: Airport[] = [
+    { icao: 'WSSS', name: 'Singapore Changi', country: 'Singapore', iata: 'SIN', lat: 1.35, lon: 103.82 },
+    { icao: 'RJTT', name: 'Tokyo Haneda', country: 'Japan', iata: 'HND', lat: 35.55, lon: 139.77 }
+];
+
+vi.mock('@/utils/loadAirports', () => ({
+    loadAirports: vi.fn(() => Promise.resolve(mockAirports)),
+    getIcaoToCoordsMap: vi.fn(() => ({
+        WSSS: [1.35, 103.82],
+        RJTT: [35.55, 139.77]
+    })),
+    getNearestAirport: vi.fn(() => mockAirports[0])
+}));
+
+vi.mock('@/utils/icao', () => ({
+    isICAO: (code: string) => code.length === 4
+}));
+
 import '@testing-library/jest-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import MapView from './MapView';
+import type { Airport } from '@/utils/loadAirports';
 
 describe('MapView', () => {
     beforeEach(() => {
-        vi.resetAllMocks();
-    });
-
-    it('renders the map and flight path', async () => {
         globalThis.fetch = vi.fn(() =>
             Promise.resolve({
                 ok: true,
@@ -26,23 +41,29 @@ describe('MapView', () => {
                     ])
             })
         ) as unknown as typeof fetch;
-
-        render(<MapView />);
-        expect(await screen.findByText('Flight 1')).toBeInTheDocument();
-        expect(await screen.findByText('WSSS')).toBeInTheDocument();
-        expect(await screen.findByText('RJTT')).toBeInTheDocument();
     });
 
-    it('renders empty map if no trajectories returned', async () => {
-        globalThis.fetch = vi.fn(() =>
-            Promise.resolve({
-                ok: true,
-                json: () => Promise.resolve([])
-            })
-        ) as unknown as typeof fetch;
+    it('renders the map and zoom buttons', async () => {
 
         render(<MapView />);
-        expect(await screen.queryByText(/Flight/i)).not.toBeInTheDocument();
+
+        await screen.findByText(/Click on a flight route to view its summary/i);
+        expect(document.querySelector('.leaflet-container')).toBeInTheDocument();
+        expect(screen.getByText(/Find Flights/i)).toBeInTheDocument();
+        expect(screen.getByAltText(/Recenter/i)).toBeInTheDocument();
+        const zoomInButtons = screen.getAllByTitle(/Zoom in/i);
+        expect(zoomInButtons.length).toBeGreaterThan(0);
+        const zoomOutButtons = screen.getAllByTitle(/Zoom out/i);
+        expect(zoomOutButtons.length).toBeGreaterThan(0);
+
+
+    });
+
+    it('shows loading spinner while fetching data', async () => {
+        render(<MapView />);
+        expect(screen.getByTestId('spinner')).toBeInTheDocument();
+        await screen.findByText(/Click on a flight route to view its summary/i);
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
 
     it('shows error if fetch fails', async () => {

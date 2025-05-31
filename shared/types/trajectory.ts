@@ -17,8 +17,8 @@ export interface Trajectory {
     inferredAdesName?: string | null;
     adepCountry?: string | null;
     adesCountry?: string | null;
-    inferredAdepIATA?: string | null;
-    inferredAdesIATA?: string | null;
+    adepIATA?: string | null;
+    adesIATA?: string | null;
     inferredAdepCoords?: [number, number];
     inferredAdesCoords?: [number, number];
 };

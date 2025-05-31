@@ -1,10 +1,9 @@
 import { Polyline, Marker, Tooltip, CircleMarker } from 'react-leaflet';
-import { getColorByRoute } from '../../utils/colorByRoute';
-import type { Trajectory } from '../../../../shared/types/trajectory';
+import { getColorByRoute } from '@/utils/colorByRoute';
+import type { Trajectory } from '@shared/types/trajectory';
 import L from 'leaflet';
-
+import { getDecreasingOffset, getIncreasingOffset } from '@/utils/offset';
 import styles from './TrajectoryLayer.module.css';
-import { getDecreasingOffset, getIncreasingOffset } from '../../utils/offset';
 
 interface TrajectoryLayerProps {
     trajectories: Trajectory[];
@@ -55,14 +54,14 @@ export default function TrajectoryLayer({ trajectories,
             uniqueAirports.set(traj.inferredAdep, {
                 coords: traj.inferredAdepCoords,
                 name: traj.inferredAdepName || traj.inferredAdep,
-                iata: traj.inferredAdepIATA || "",
+                iata: traj.adepIATA || "",
             });
         }
         if (traj.inferredAdes && traj.inferredAdesCoords) {
             uniqueAirports.set(traj.inferredAdes, {
                 coords: traj.inferredAdesCoords,
                 name: traj.inferredAdesName || traj.inferredAdes,
-                iata: traj.inferredAdesIATA || "",
+                iata: traj.adesIATA || "",
             });
         }
     });
@@ -114,8 +113,8 @@ export default function TrajectoryLayer({ trajectories,
                         )}
                         <CircleMarker center={dep} radius={4} pathOptions={{ color: '#008000', fillOpacity: 0.7 }} >
                             {zoomLevel < 7 && (<Tooltip sticky className={styles.tooltip}>
-                                {traj.inferredAdepName && traj.inferredAdepIATA
-                                    ? `${traj.inferredAdepName} (${traj.inferredAdepIATA})`
+                                {traj.inferredAdepName && traj.adepIATA
+                                    ? `${traj.inferredAdepName} (${traj.adepIATA})`
                                     : traj.inferredAdep}
                             </Tooltip>)}
                         </CircleMarker>
@@ -125,8 +124,8 @@ export default function TrajectoryLayer({ trajectories,
                         )}
                         <CircleMarker center={arr} radius={4} pathOptions={{ color: '#ff2d55', fillOpacity: 0.7 }} >
                             {zoomLevel < 7 && (<Tooltip sticky className={styles.tooltip}>
-                                {traj.inferredAdesName && traj.inferredAdesIATA
-                                    ? `${traj.inferredAdesName} (${traj.inferredAdesIATA})`
+                                {traj.inferredAdesName && traj.adesIATA
+                                    ? `${traj.inferredAdesName} (${traj.adesIATA})`
                                     : traj.inferredAdes}
                             </Tooltip>)}
                         </CircleMarker>

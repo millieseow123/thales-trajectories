@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import type { Trajectory } from '../../../shared/types/trajectory';
-import { getIcaoToCoordsMap, getNearestAirport } from '../utils/loadAirports';
-import { isICAO } from '../utils/icao';
-import { loadAirports } from '../utils/loadAirports';
+import type { Trajectory } from '@shared/types/trajectory';
+import { getIcaoToCoordsMap, getNearestAirport } from '@/utils/loadAirports';
+import { isICAO } from '@/utils/icao';
+import { loadAirports } from '@/utils/loadAirports';
 
 export function useTrajectories() {
     const [data, setData] = useState<Trajectory[]>([]);
@@ -19,7 +19,18 @@ export function useTrajectories() {
                 const airports = await loadAirports();
                 const icaoToCoordsMap = getIcaoToCoordsMap(airports);
 
-                const enhanced = json.map(t => {
+                const enhanced = json.flatMap(t => {
+                    if (
+                        !t.adep ||
+                        !t.ades ||
+                        !Array.isArray(t.waypoints) ||
+                        t.waypoints.length === 0 ||
+                        typeof t.waypoints[0].latitude !== 'number' ||
+                        typeof t.waypoints[0].longitude !== 'number'
+                    ) {
+                        return [];
+                    }
+
                     const adepObj = isICAO(t.adep)
                         ? airports.find(a => a.icao === t.adep)
                         : getNearestAirport(t.waypoints[0].latitude, t.waypoints[0].longitude, airports);
@@ -42,11 +53,11 @@ export function useTrajectories() {
                         inferredAdesName: adesObj?.name || null,
                         adepCountry: adepObj?.country || null,
                         adesCountry: adesObj?.country || null,
-                        inferredAdepIATA: adepObj?.iata || null,
-                        inferredAdesIATA: adesObj?.iata || null,
-                        inferredAdepCoords: adepCoords ? adepCoords : [t.waypoints[0].latitude, t.waypoints[0].longitude],
-                        inferredAdesCoords: adesCoords ? adesCoords : [t.waypoints[t.waypoints.length - 1].latitude,
-                        t.waypoints[t.waypoints.length - 1].longitude,],
+                        adepIATA: adepObj?.iata || null,
+                        adesIATA: adesObj?.iata || null,
+                        inferredAdepCoords: adepCoords ? adepCoords as [number, number] : [t.waypoints[0].latitude, t.waypoints[0].longitude] as [number, number],
+                        inferredAdesCoords: adesCoords ? adesCoords as [number, number] : [t.waypoints[t.waypoints.length - 1].latitude,
+                        t.waypoints[t.waypoints.length - 1].longitude,] as [number, number],
                     };
                 });
 

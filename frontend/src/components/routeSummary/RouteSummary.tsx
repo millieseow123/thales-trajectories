@@ -1,8 +1,8 @@
-import type { Trajectory } from "@shared/types/trajectory";
 import arrowImg from '@/assets/arrow.png';
 import departureIcon from "@/assets/departure.png";
 import arrivalIcon from "@/assets/arrival.png";
 import closeIcon from "@/assets/close.png";
+import type { Trajectory } from "@shared/types/trajectory";
 import { computeTotalDistance } from "@/utils/computeDistance";
 import styles from "./RouteSummary.module.css";
 

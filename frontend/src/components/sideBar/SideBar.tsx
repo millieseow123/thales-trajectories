@@ -1,17 +1,18 @@
+import L from 'leaflet';
 import Select from 'react-select';
 import 'react-datepicker/dist/react-datepicker.css';
-import styles from './Sidebar.module.css';
-import type { Trajectory } from '@shared/types/trajectory';
 import { useEffect, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import Legend from '@/components/legend/Legend';
 import expandIconUrl from '@/assets/expand.png';
 import collapseIconUrl from '@/assets/collapse.png';
 import resetIconUrl from '@/assets/reset.png';
-import L from 'leaflet';
-import { customStyles } from './selectStyles'
+import { TEXT } from '@/constants/text';
+import Legend from '@/components/legend/Legend';
+import type { Trajectory } from '@shared/types/trajectory';
 import { groupAirportsByCountry } from '@/utils/groupAirportsByCountry';
 import type { Airport } from '@/utils/groupAirportsByCountry';
+import { customStyles } from './selectStyles'
+import styles from './SideBar.module.css';
 
 interface SidebarProps {
     mapRef: React.RefObject<L.Map | null>;
@@ -133,7 +134,7 @@ export default function Sidebar({
                 <div className={styles.sidebar} onMouseEnter={() => mapRef.current?.scrollWheelZoom.disable()}
                     onMouseLeave={() => mapRef.current?.scrollWheelZoom.enable()}>
                     <div className={styles.sidebarTitle}>
-                        <h4>Find Flights</h4>
+                        <h4>{TEXT.sidebar.title}</h4>
                         <button
                             className={styles.clearButton}
                             onClick={() => {
@@ -144,7 +145,7 @@ export default function Sidebar({
                                 setStartTime(null);
                                 setEndTime(null);
                             }}
-                            title="Clear all filters"
+                            title={TEXT.sidebar.clearFiltersTooltip}
                         >
 
                             <img src={resetIconUrl} alt="Reset filters" />
@@ -158,7 +159,7 @@ export default function Sidebar({
                             <div className={styles.flightSearchContainer}>
                                 <input
                                     type="text"
-                                    placeholder="Search Flight ID"
+                                    placeholder={TEXT.sidebar.flightId.placeholder}
                                     value={flightIdFilter}
                                     onChange={(e) => {
                                         const query = e.target.value;
@@ -168,7 +169,7 @@ export default function Sidebar({
                                             setSelectedFlightId(null);
                                             setFlightSuggestions([]);
                                             return;
-                                          }
+                                        }
 
                                         const matches = trajectories
                                             .filter(t => t.id.toString().includes(query))
@@ -214,7 +215,7 @@ export default function Sidebar({
                         </div>
 
                         <div className={styles.filters}>
-                            <h5>By Airport:</h5>
+                            <h5>{TEXT.sidebar.airport.label}</h5>
                             <Select
                                 menuPortalTarget={document.body}
                                 styles={customStyles}
@@ -227,7 +228,7 @@ export default function Sidebar({
                                 onChange={(selected) =>
                                     setAdepFilter(selected?.value || '')
                                 }
-                                placeholder="Select Departure"
+                                placeholder={TEXT.sidebar.airport.departure}
                                 isClearable
                                 className={styles.select}
                                 classNamePrefix="select"
@@ -244,7 +245,7 @@ export default function Sidebar({
                                     .find(opt => opt.value === adesFilter) || null}
                                 onChange={(opt) => setAdesFilter(opt?.value || '')}
                                 filterOption={() => true}
-                                placeholder="Select Arrival"
+                                placeholder={TEXT.sidebar.airport.arrival}
                                 isClearable
                                 className={styles.select}
                                 classNamePrefix="select"
@@ -252,7 +253,7 @@ export default function Sidebar({
                         </div>
 
                         <div className={styles.filters}>
-                            <h5>By Time:</h5>
+                            <h5>{TEXT.sidebar.time.label}</h5>
                             <div className={styles.quickFilters}>
                                 <button
                                     className={selectedTimeFilter === 'today' ? styles.active : ''}
@@ -271,7 +272,8 @@ export default function Sidebar({
                                             setStartTime(now);
                                         }
                                     }}>
-                                    Today</button>
+                                    {TEXT.sidebar.time.quickFilters.today}
+                                </button>
                                 <button
                                     className={selectedTimeFilter === '1h' ? styles.active : ''}
                                     onClick={() => {
@@ -283,7 +285,9 @@ export default function Sidebar({
                                             setSelectedTimeFilter('1h');
                                             setStartTime(last1h);
                                         }
-                                    }}>Last 1h</button>
+                                    }}>
+                                    {TEXT.sidebar.time.quickFilters.last1h}
+                                </button>
                                 <button
                                     className={selectedTimeFilter === '24h' ? styles.active : ''}
                                     onClick={() => {
@@ -295,7 +299,9 @@ export default function Sidebar({
                                             setSelectedTimeFilter('24h');
                                             setStartTime(last24h);
                                         }
-                                    }}>Last 24h</button>
+                                    }}>
+                                    {TEXT.sidebar.time.quickFilters.last24h}
+                                </button>
                             </div>
 
                             <div className={styles.dateContainer}>
@@ -337,7 +343,7 @@ export default function Sidebar({
                                 onChange={(e) => setShowIcaoLabels(e.target.checked)}
                                 disabled={zoomLevel < 7}
                             />
-                            ICAO Airport Code
+                            {TEXT.sidebar.toggles.showIcao}
                         </label>
                         <label className={styles.checkbox}>
                             <input
@@ -345,7 +351,7 @@ export default function Sidebar({
                                 checked={showAirportNames}
                                 onChange={(e) => setShowAirportNames(e.target.checked)}
                             />
-                            Show Airport Name
+                            {TEXT.sidebar.toggles.showName}
                         </label>
                     </div>
 

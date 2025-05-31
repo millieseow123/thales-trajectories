@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Trajectory } from '@shared/types/trajectory';
-import { getIcaoToCoordsMap, getNearestAirport } from '@/utils/loadAirports';
+import { getIcaoToCoordsMap, getNearestAirport, loadAirports } from '@/utils/loadAirports';
 import { isICAO } from '@/utils/icao';
-import { loadAirports } from '@/utils/loadAirports';
 
 export function useTrajectories() {
     const [data, setData] = useState<Trajectory[]>([]);

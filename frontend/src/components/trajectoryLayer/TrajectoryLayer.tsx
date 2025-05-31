@@ -1,7 +1,7 @@
-import { Polyline, Marker, Tooltip, CircleMarker } from 'react-leaflet';
-import { getColorByRoute } from '@/utils/colorByRoute';
-import type { Trajectory } from '@shared/types/trajectory';
 import L from 'leaflet';
+import { Polyline, Marker, Tooltip, CircleMarker } from 'react-leaflet';
+import type { Trajectory } from '@shared/types/trajectory';
+import { getColorByRoute } from '@/utils/colorByRoute';
 import { getDecreasingOffset, getIncreasingOffset } from '@/utils/offset';
 import styles from './TrajectoryLayer.module.css';
 

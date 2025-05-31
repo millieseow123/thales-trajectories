@@ -1,13 +1,13 @@
+import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MapContainer, useMapEvents, TileLayer, ZoomControl } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { useTrajectories } from '@/hooks/useTrajectories';
 import LoadingSpinner from '@/components/loadingSpinner/LoadingSpinner';
-import Sidebar from '@/components/sideBar/SideBar';
 import { RecenterButton } from '@/components/recenter/Recenter';
 import { RouteSummary } from '@/components/routeSummary/RouteSummary';
+import Sidebar from '@/components/sideBar/SideBar';
 import TrajectoryLayer from '@/components/trajectoryLayer/TrajectoryLayer';
+import { useTrajectories } from '@/hooks/useTrajectories';
 import type { Trajectory } from '@shared/types/trajectory';
 import styles from './MapView.module.css';
 

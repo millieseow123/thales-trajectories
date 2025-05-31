@@ -2,7 +2,10 @@
   margin-top: 0;
 }
 
-.legendContainer {
+.legendContainer,
+.greenSpeedContainer,
+.yellowSpeedContainer,
+.redSpeedContainer {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -46,4 +49,37 @@
   font-size: 0.75rem;
   font-family: monospace;
   border: 1px solid #444;
+}
+
+.speed {
+  margin-top: 1rem;
+}
+
+.speed > strong {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.greenSpeedContainer > span:first-child {
+  background-color: #1fc600;
+  display: inline-block;
+  height: 8px;
+  margin-right: 3rem;
+  width: 16px;
+}
+
+.yellowSpeedContainer > span:first-child {
+  background-color: #ffa500;
+  display: inline-block;
+  height: 8px;
+  margin-right: 3rem;
+  width: 16px;
+}
+
+.redSpeedContainer > span:first-child {
+  background-color: red;
+  display: inline-block;
+  height: 8px;
+  margin-right: 3rem;
+  width: 16px;
 }

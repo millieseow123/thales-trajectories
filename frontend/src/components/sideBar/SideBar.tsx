@@ -155,7 +155,7 @@ export default function Sidebar({
                     <div className={styles.filterContainer}>
                         <div className={styles.filters}>
 
-                            <h5>By Flight ID:</h5>
+                            <h5>{CONSTANTS.SIDEBAR.FLIGHT_ID.LABEL}</h5>
                             <div className={styles.flightSearchContainer}>
                                 <input
                                     type="text"

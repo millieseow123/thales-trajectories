@@ -25,7 +25,7 @@ export function RecenterButton() {
     };
 
     return (
-        <button className={styles.button} onClick={handleClick}>
+        <button className={styles.button} title="Recenter map" onClick={handleClick}>
             <img src={recenterIcon} alt="Recenter" />
         </button>
     );

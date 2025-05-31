@@ -12,6 +12,10 @@ describe('Legend component', () => {
         expect(screen.getByText(CONSTANTS.LEGEND.ARRIVAL)).toBeInTheDocument();
         expect(screen.getByText(CONSTANTS.LEGEND.ICAO_CODE)).toBeInTheDocument();
         expect(screen.getByText(CONSTANTS.LEGEND.SAMPLE_ICAO)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.LEGEND.SPEED)).toBeInTheDocument();
+        expect(screen.getByText(`<${CONSTANTS.LEGEND.GREEN}`)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.LEGEND.YELLOW, { exact: false })).toBeInTheDocument();
+        expect(screen.getByText(`> ${CONSTANTS.LEGEND.RED}`)).toBeInTheDocument();
     });
 
     it('does not render unrelated text', () => {

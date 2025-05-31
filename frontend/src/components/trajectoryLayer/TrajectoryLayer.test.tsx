@@ -26,6 +26,47 @@ const mockTrajectories: Trajectory[] = [
     }
 ];
 
+const fastTrajectory: Trajectory = {
+    id: 1,
+    adep: 'WSSS',
+    ades: 'RJTT',
+    waypoints: [
+        { latitude: 1.35, longitude: 103.82, time: '2024-01-01T00:00:00Z', altitude: 1000 },
+        { latitude: 35.55, longitude: 139.77, time: '2024-01-01T02:00:00Z', altitude: 35000 }
+    ],
+    inferredAdep: 'WSSS',
+    inferredAdes: 'RJTT',
+    inferredAdepName: 'Singapore Changi',
+    inferredAdesName: 'Tokyo Haneda',
+    adepCountry: 'Singapore',
+    adesCountry: 'Japan',
+    adepIATA: 'SIN',
+    adesIATA: 'HND',
+    inferredAdepCoords: [1.35, 103.82],
+    inferredAdesCoords: [35.55, 139.77]
+};
+
+const slowTrajectory: Trajectory = {
+    ...fastTrajectory,
+    id: 2,
+    waypoints: [
+        { latitude: 1.35, longitude: 103.82, time: '2024-01-01T00:00:00Z', altitude: 1000 },
+        { latitude: 35.55, longitude: 139.77, time: '2024-01-01T20:00:00Z', altitude: 35000 }
+    ],
+    adep: 'RJTT',
+    ades: 'WSSS',
+    inferredAdep: 'RJTT',
+    inferredAdes: 'WSSS',
+    inferredAdepName: 'Tokyo Haneda',
+    inferredAdesName: 'Singapore Changi',
+    adepCountry: 'Japan',
+    adesCountry: 'Singapore',
+    adepIATA: 'HND',
+    adesIATA: 'SIN',
+    inferredAdepCoords: [35.55, 139.77],
+    inferredAdesCoords: [1.35, 103.82]
+};
+
 describe('TrajectoryLayer', () => {
     const defaultProps = {
         trajectories: mockTrajectories,
@@ -74,6 +115,33 @@ describe('TrajectoryLayer', () => {
             }
         });
         expect(hasPolylineColor).toBe(true);
+    });
+
+    it('renders polylines with different colors based on speed', () => {
+        render(
+            <MapContainer center={[1.35, 103.82]} zoom={8} style={{ height: 400, width: 600 }}>
+                <TrajectoryLayer {...defaultProps} trajectories={[fastTrajectory, slowTrajectory]} />
+            </MapContainer>
+        );
+        const paths = Array.from(document.querySelectorAll('path.leaflet-interactive'));
+        const strokes = paths.map(path => path.getAttribute('stroke'));
+        const uniqueStrokes = Array.from(new Set(strokes));
+        expect(uniqueStrokes.length).toBeGreaterThan(1);
+    });
+
+    it('dims unselected polylines', () => {
+        render(
+            <MapContainer center={[1.35, 103.82]} zoom={8} style={{ height: 400, width: 600 }}>
+                <TrajectoryLayer
+                    {...defaultProps}
+                    trajectories={[fastTrajectory, slowTrajectory]}
+                    selectedTrajectoryId={fastTrajectory.id}
+                />
+            </MapContainer>
+        );
+        const paths = Array.from(document.querySelectorAll('path.leaflet-interactive'));
+        const dimmedPath = paths.find(path => path.getAttribute('stroke-opacity') === '0.02');
+        expect(dimmedPath).toBeTruthy();
     });
 
     it('renders airport name labels when showAirportNames is true', () => {

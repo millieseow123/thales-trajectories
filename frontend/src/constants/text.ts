@@ -31,6 +31,9 @@ export const CONSTANTS = {
         HINT: 'Cick on a flight route to view its summary',
         ERROR: 'Error loading data',
     },
+    TRAJECTORY_LAYER: {
+        FLIGHT: 'Flight ',
+    },
     ROUTE_SUMMARY: {
         TITLE: "Route Summary",
         FLIGHT_ID: "Flight ID:",
@@ -50,5 +53,9 @@ export const CONSTANTS = {
         ARRIVAL: 'Arrival Airport',
         SAMPLE_ICAO: 'WSSS',
         ICAO_CODE: 'ICAO Code',
+        SPEED: 'Speed (km/h)',
+        GREEN: '500',
+        YELLOW: '500 - 800',
+        RED: '800',
     }
 };

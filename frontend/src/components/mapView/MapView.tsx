@@ -36,6 +36,13 @@ export default function MapView() {
         return () => clearTimeout(timer);
     }, []);
 
+    useEffect(() => {
+        const zoomIn = document.querySelector('.leaflet-control-zoom-in') as HTMLElement;
+        const zoomOut = document.querySelector('.leaflet-control-zoom-out') as HTMLElement;
+        if (zoomIn) zoomIn.title = 'Zoom in';
+        if (zoomOut) zoomOut.title = 'Zoom out';
+    }, []);
+
     const handlePolylineClick = (id: number) => {
         setSelectedTrajectoryId(id);
         setShowHint(false);
@@ -89,7 +96,7 @@ export default function MapView() {
             },
         });
         return null;
-    }
+    };
 
     return (
         <MapContainer

@@ -2,8 +2,11 @@ import L from 'leaflet';
 import { Polyline, Marker, Tooltip, CircleMarker } from 'react-leaflet';
 import type { Trajectory } from '@shared/types/trajectory';
 import { getColorByRoute } from '@/utils/colorByRoute';
+import { getColorBySpeed } from '@/utils/colorBySpeed';
+import { haversineDistance } from '@/utils/distanceUtils';
 import { getDecreasingOffset, getIncreasingOffset } from '@/utils/offset';
 import styles from './TrajectoryLayer.module.css';
+import { CONSTANTS } from '@/constants/text';
 
 interface TrajectoryLayerProps {
     trajectories: Trajectory[];
@@ -81,32 +84,76 @@ export default function TrajectoryLayer({ trajectories,
                 const color = getColorByRoute(traj.inferredAdep ?? traj.adep, traj.inferredAdes ?? traj.ades);
                 const isSelected = selectedTrajectoryId === traj.id;
                 const isHovered = hoveredIdRef.current === traj.id;
-                const polylineColor = isSelected || isHovered ? '#00FFFF' : color;
                 const polylineWeight = isSelected || isHovered ? 5 : 2.5;
                 return (
                     <div key={traj.id}>
-                        <Polyline pathOptions={{
-                            color: polylineColor,
-                            weight: polylineWeight,
-                            opacity: 0.7,
-                        }} positions={positions}
-                            eventHandlers={{
-                                click: () => {
-                                    setSelectedTrajectory(traj);
-                                    setSelectedTrajectoryId(traj.id);
-                                    handlePolylineClick(traj.id);
-                                },
-                                mouseover: () => {
-                                    hoveredIdRef.current = traj.id;
-                                    forceUpdate();
-                                },
-                                mouseout: () => {
-                                    hoveredIdRef.current = null;
-                                    forceUpdate();
-                                },
-                            }}>
-                            <Tooltip sticky className={styles.tooltip}>{`Flight ${traj.id}`}</Tooltip>
-                        </Polyline>
+                        {selectedTrajectoryId === traj.id ? (
+                            traj.waypoints.slice(1).map((wp2, i) => {
+                                const waypointsWithDepArr = [
+                                    { ...traj.waypoints[0], latitude: dep[0], longitude: dep[1] },
+                                    ...traj.waypoints.slice(1, -1),
+                                    { ...traj.waypoints[traj.waypoints.length - 1], latitude: arr[0], longitude: arr[1] }
+                                ];
+                                const wp1 = waypointsWithDepArr[i];
+                                const from: [number, number] = [wp1.latitude, wp1.longitude];
+                                const to: [number, number] = [wp2.latitude, wp2.longitude];
+                                const distance = haversineDistance(...from, ...to);
+                                if (!wp1.time || !wp2.time) return null;
+                                const timeDiff = (new Date(wp2.time).getTime() - new Date(wp1.time).getTime()) / 3600000;
+                                const speed = distance / timeDiff;
+                                const segmentColor = getColorBySpeed(speed);
+
+                                return (
+                                    <Polyline
+                                        key={`${traj.id}-${i}`}
+                                        positions={[from, to]}
+                                        pathOptions={{
+                                            color: segmentColor,
+                                            weight: 5,
+                                            opacity: 0.9,
+                                        }}
+                                        eventHandlers={{
+                                            click: () => {
+                                                setSelectedTrajectory(traj);
+                                                setSelectedTrajectoryId(traj.id);
+                                                handlePolylineClick(traj.id);
+                                            },
+                                        }}
+                                    >
+                                        <Tooltip sticky className={styles.tooltip}>{`${CONSTANTS.TRAJECTORY_LAYER.FLIGHT} ${traj.id}`}</Tooltip>
+                                    </Polyline>
+                                );
+                            })
+                        ) : (
+                            <Polyline
+                                key={traj.id}
+                                positions={positions}
+                                pathOptions={{
+                                    color: color,
+                                    weight: polylineWeight,
+                                    opacity: selectedTrajectoryId && selectedTrajectoryId !== traj.id ? 0.02 : 1,
+                                }}
+                                className={`${styles.trajectoryLine} ${selectedTrajectoryId && selectedTrajectoryId !== traj.id ? styles.dimmed : ''}`}
+                                eventHandlers={{
+                                    click: () => {
+                                        setSelectedTrajectory(traj);
+                                        setSelectedTrajectoryId(traj.id);
+                                        handlePolylineClick(traj.id);
+                                    },
+                                    mouseover: () => {
+                                        hoveredIdRef.current = traj.id;
+                                        forceUpdate();
+                                    },
+                                    mouseout: () => {
+                                        hoveredIdRef.current = null;
+                                        forceUpdate();
+                                    },
+                                }}
+                            >
+                                <Tooltip sticky className={styles.tooltip}>{`Flight ${traj.id}`}</Tooltip>
+                            </Polyline>
+                        )}
+
 
                         <>
                             {showIcaoLabels && (
@@ -125,7 +172,7 @@ export default function TrajectoryLayer({ trajectories,
                                 pathOptions={{ color: '#008000', fillOpacity: 0.7 }}
                                 className={styles.marker}
                             >
-                              {!showAirportNames && <Tooltip
+                                {!showAirportNames && <Tooltip
                                     className={styles.tooltip}
                                     direction="top"
                                     offset={[0, -10]}

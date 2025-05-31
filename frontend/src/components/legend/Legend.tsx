@@ -26,6 +26,22 @@ export default function Legend() {
                 </div>
                 <span>{CONSTANTS.LEGEND.ICAO_CODE}</span>
             </div>
+
+            <div className={styles.speed}>
+                <strong>{CONSTANTS.LEGEND.SPEED}</strong>
+                <div className={styles.greenSpeedContainer}>
+                    <span></span>
+                    <span>&lt;{CONSTANTS.LEGEND.GREEN}</span>
+                </div>
+                <div className={styles.yellowSpeedContainer}>
+                    <span></span>
+                    <span> {CONSTANTS.LEGEND.YELLOW}</span>
+                </div>
+                <div className={styles.redSpeedContainer}>
+                    <span></span>
+                    <span>&gt; {CONSTANTS.LEGEND.RED}</span>
+                </div>
+            </div>
         </div>
     );
 }

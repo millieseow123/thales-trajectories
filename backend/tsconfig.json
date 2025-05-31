@@ -3,13 +3,17 @@
     "target": "ES2020",
     "module": "CommonJS",
     "moduleResolution": "node",
-    "rootDir": ".",
-    "outDir": "dist",
+    "rootDir": "../..",
+    "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "types": ["node"]
   },
+  "include": [
+    "../../shared",
+    "backend"
+  ],
   "exclude": ["node_modules", "dist"]
 }

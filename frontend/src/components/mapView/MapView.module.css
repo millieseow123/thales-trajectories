@@ -4,16 +4,16 @@
 }
 
 .hint {
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 12px;
+  color: #ccc;
+  font-size: 0.8rem;
+  left: 50%;
+  padding: 0.375rem 0.75rem;
+  pointer-events: none;
   position: absolute;
   top: 10px;
-  left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.6);
-  color: #ccc;
-  padding: 6px 12px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  z-index: 1000;
-  pointer-events: none;
   transition: opacity 0.3s ease;
+  z-index: 1000;
 }

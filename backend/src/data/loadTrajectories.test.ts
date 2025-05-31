@@ -74,13 +74,13 @@ describe('loadTrajectories from DB', () => {
                 id: t1.id,
                 adep: t1.adep,
                 ades: t1.ades,
-                waypoints: JSON.stringify(t1.waypoints),
+                waypoints: t1.waypoints,
             },
             {
                 id: t2.id,
                 adep: t2.adep,
                 ades: t2.ades,
-                waypoints: JSON.stringify(t2.waypoints),
+                waypoints: t2.waypoints,
             },
         ]]);
 
@@ -101,7 +101,7 @@ describe('loadTrajectories from DB', () => {
         ]]);
 
         const data = await loadTrajectories();
-        expect(data[0].waypoints).toEqual('invalid json');
+        expect(data).toHaveLength(0);
     });
 
     it('should skip malformed lines', () => {

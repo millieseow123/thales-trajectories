@@ -23,21 +23,22 @@ html, body, #root {
 
 .leaflet-interactive:focus {
   outline: none;
+  stroke-width: 6;
 }
 
 .leaflet-interactive:hover {
-  stroke-width: 4px;
   filter: drop-shadow(0 0 2px white);
+  stroke-width: 6;
 }
 
 .react-datepicker__input-container input {
   width: 90%;
   background-color: #1f1f1f;
-  color: white;
   border: 1px solid #444;
   border-radius: 4px;
+  color: white;
   font-size: 0.8rem;
-  padding: 8px 0px 8px 10px;
+  padding: 0.5rem 0px 0.5rem 0.625rem;
 }
 
 .react-datepicker__input-container input::placeholder {

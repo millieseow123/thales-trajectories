@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { format } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import { CONSTANTS } from '@/constants/text';
 import type { Trajectory } from '@shared/types/trajectory';
 import { computeTotalDistance } from '@/utils/computeDistance';
@@ -35,8 +35,8 @@ describe('RouteSummary', () => {
         expect(screen.getByText(mockTrajectory.adesIATA!)).toBeInTheDocument();
         const depTime = mockTrajectory.waypoints?.[0]?.time;
         const arrTime = mockTrajectory.waypoints?.at(-1)?.time;
-        const formattedDep = depTime ? format(new Date(depTime), 'dd MMM yyyy, HH:mm') : 'N/A';
-        const formattedArr = arrTime ? format(new Date(arrTime), 'dd MMM yyyy, HH:mm') : 'N/A';
+        const formattedDep = depTime ? formatInTimeZone(new Date(depTime), 'UTC', 'dd MMM yyyy, HH:mm') : 'N/A';
+        const formattedArr = arrTime ? formatInTimeZone(new Date(arrTime), 'UTC', 'dd MMM yyyy, HH:mm') : 'N/A';
 
         expect(screen.getByText(formattedDep)).toBeInTheDocument();
         expect(screen.getByText(formattedArr)).toBeInTheDocument();

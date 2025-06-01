@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import arrowImg from '@/assets/arrow.png';
 import departureIcon from "@/assets/departure.png";
 import arrivalIcon from "@/assets/arrival.png";
@@ -35,13 +35,12 @@ export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
     const arrivalTime = trajectory.waypoints?.at(-1)?.time;
 
     const formattedDepartureTime = departureTime
-        ? format(new Date(departureTime), 'dd MMM yyyy, HH:mm')
+        ? formatInTimeZone(departureTime, 'UTC', 'dd MMM yyyy, HH:mm')
         : 'N/A';
 
     const formattedArrivalTime = arrivalTime
-        ? format(new Date(arrivalTime), 'dd MMM yyyy, HH:mm')
+        ? formatInTimeZone(arrivalTime, 'UTC', 'dd MMM yyyy, HH:mm')
         : 'N/A';
-
     return (
         <div className={styles.routeSummary}>
             <button className={styles.closeButton} onClick={onClose}>

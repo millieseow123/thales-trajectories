@@ -5,10 +5,12 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     try {
-        const data = await loadTrajectories();
+        const limit = parseInt(req.query.limit as string) || 100;
+        const offset = parseInt(req.query.offset as string) || 0;
+
+        const data = await loadTrajectories(limit, offset);
         res.json(data);
     } catch (err) {
-        console.error('[ERROR] Failed to load trajectories:', err);
         res.status(500).json({ error: 'Failed to load trajectories' });
     }
 });

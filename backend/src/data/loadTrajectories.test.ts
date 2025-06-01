@@ -30,7 +30,7 @@ describe('loadTrajectories from DB', () => {
     beforeEach(() => {
         (mysqlMock as any).__mockQuery.mockReset();
     });
-        
+    
     it('should return trajectories from DB with waypoints', async () => {
         const traj = getFirstTrajectoryFromJSONL();
 
@@ -50,6 +50,38 @@ describe('loadTrajectories from DB', () => {
         expect(data[0].adep).toBe(traj.adep);
         expect(Array.isArray(data[0].waypoints)).toBe(true);
         expect(data[0].waypoints[0]).toHaveProperty('latitude');
+    });
+
+    it('should fetch first 100 trajectories by default', async () => {
+        (mysqlMock as any).__mockQuery.mockResolvedValueOnce([Array(100).fill({
+            id: 1,
+            adep: 'WSSS',
+            ades: 'RJTT',
+            waypoints: [{ latitude: 1.35, longitude: 103.82, time: '2024-01-01T00:00:00Z', altitude: 1000 }]
+        })]);
+        const data = await loadTrajectories();
+        expect((mysqlMock as any).__mockQuery).toHaveBeenCalledWith(
+            'SELECT * FROM trajectories LIMIT ? OFFSET ?',
+            [100, 0]
+        );
+        expect(data).toHaveLength(100);
+    });
+
+    it('should fetch trajectories with custom limit and offset', async () => {
+        (mysqlMock as any).__mockQuery.mockResolvedValueOnce([Array(10).fill({
+            id: 2,
+            adep: 'KLAX',
+            ades: 'EGLL',
+            waypoints: [{ latitude: 33.94, longitude: -118.4, time: '2024-01-01T00:00:00Z', altitude: 1000 }]
+        })]);
+        const limit = 10;
+        const offset = 50;
+        const data = await loadTrajectories(limit, offset);
+        expect((mysqlMock as any).__mockQuery).toHaveBeenCalledWith(
+            'SELECT * FROM trajectories LIMIT ? OFFSET ?',
+            [limit, offset]
+        );
+        expect(data).toHaveLength(10);
     });
 
     it('should throw an error on DB failure', async () => {

@@ -42,14 +42,22 @@ thales-trajectories/
 - MySQL running locally 
 
 ### 🔧 Database Seeding
-```bash
+First, create your database in MySQL:
+```sql
 CREATE DATABASE trajectories_db;
 USE trajectories_db;
+```
 
+Next, create a `.env` file in `backend/` with your database credentials:
+```env
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_mysql_password
 DB_NAME=trajectories_db
+```
+
+Then run the seed script:
+```bash
 npx ts-node scripts/seedTrajectories.ts
 ```
 
@@ -73,13 +81,15 @@ Open [http://localhost:5173](http://localhost:5173) with your browser to see the
 ### Features
 - Interactive Leaflet map showing aircraft routes
 - Recenter to current geolocation
-- Clickable polylines with route summary (distance, duration, altitudes)
-- Filter by:
+- Clickable polylines with route summary (distance, duration, speed, altitude)
+- Collapsible sidebar which filters by:
     - Flight ID search with dropdown suggestions
     - Departure & arrival airports
     - Time range (today, last 1h/24h, or custom)
-- ICAO/IATA toggle, airport name labels
+- Legend: ICAO/IATA toggle, airport name labels
+- Legend with speed-based color matching: The legend displays color codes for trajectory segments based on speed (e.g., green for slow, yellow for medium, red for fast), helping you visually interpret flight speeds at a glance
 - Smart polyline visibility based on map bounds
+- Speed-colored trajectories on selection: When you click a polyline, the selected trajectory is highlighted and its segments are colored according to their calculated speed, allowing you to analyze speed variations along the route
 
 ### Testing
 Basic unit tests are included for both frontend and backend:

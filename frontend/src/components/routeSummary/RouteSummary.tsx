@@ -15,7 +15,6 @@ interface RouteSummaryProps {
 export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
     const dep = trajectory.inferredAdepName || ""
     const arr = trajectory.inferredAdesName || "";
-    console.log("xxx IATA ", trajectory.inferredAdepName)
     const depIata = trajectory.adepIATA || trajectory.inferredAdep;
     const arrIata = trajectory.adesIATA || trajectory.inferredAdes;
     const waypoints = trajectory.waypoints;

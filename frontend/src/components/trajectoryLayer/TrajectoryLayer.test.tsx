@@ -140,7 +140,7 @@ describe('TrajectoryLayer', () => {
             </MapContainer>
         );
         const paths = Array.from(document.querySelectorAll('path.leaflet-interactive'));
-        const dimmedPath = paths.find(path => path.getAttribute('stroke-opacity') === '0.02');
+        const dimmedPath = paths.find(path => path.getAttribute('stroke-opacity') === '0.01');
         expect(dimmedPath).toBeTruthy();
     });
 

@@ -4,7 +4,7 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import request from 'supertest';
-import { Trajectory } from '../../shared/types/trajectory';
+import { Trajectory } from '@shared/types/trajectory';
 
 import { Router } from 'express';
 

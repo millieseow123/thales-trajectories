@@ -1,6 +1,6 @@
 import { createPool } from 'mysql2/promise';
 import fs from 'fs';
-import type { Trajectory } from '../../../shared/types/trajectory';
+import type { Trajectory } from '@shared/types/trajectory';
 
 const pool = createPool({
     host: process.env.DB_HOST || 'localhost',
@@ -10,8 +10,12 @@ const pool = createPool({
     database: process.env.DB_NAME || 'trajectories_db',
 });
 
-export async function loadTrajectories(): Promise<Trajectory[]> {
-    const [rows] = await pool.query('SELECT * FROM trajectories');
+export async function loadTrajectories(limit = 100, offset = 0): Promise<Trajectory[]> {
+    const [rows] = await pool.query(
+        'SELECT * FROM trajectories LIMIT ? OFFSET ?',
+        [limit, offset]
+    );
+
     return (rows as any[]).flatMap(row => {
         if (row.id && row.adep && row.ades && Array.isArray(row.waypoints)) {
             return [{

@@ -87,7 +87,7 @@ export default function TrajectoryLayer({ trajectories,
                 const polylineWeight = isSelected || isHovered ? 5 : 2.5;
                 return (
                     <div key={traj.id}>
-                        {selectedTrajectoryId === traj.id ? (
+                        {isSelected ? (
                             traj.waypoints.slice(1).map((wp2, i) => {
                                 const waypointsWithDepArr = [
                                     { ...traj.waypoints[0], latitude: dep[0], longitude: dep[1] },
@@ -131,7 +131,7 @@ export default function TrajectoryLayer({ trajectories,
                                 pathOptions={{
                                     color: color,
                                     weight: polylineWeight,
-                                    opacity: selectedTrajectoryId && selectedTrajectoryId !== traj.id ? 0.02 : 1,
+                                    opacity: selectedTrajectoryId && selectedTrajectoryId !== traj.id ? 0.01 : 1,
                                 }}
                                 className={`${styles.trajectoryLine} ${selectedTrajectoryId && selectedTrajectoryId !== traj.id ? styles.dimmed : ''}`}
                                 eventHandlers={{

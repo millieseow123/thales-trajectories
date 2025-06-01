@@ -3,10 +3,6 @@
   transition: opacity 0.3s ease-in-out, stroke 0.1s ease-in-out;
 }
 
-.dimmed > path {
-  opacity: 0.2;
-}
-
 .labelIcon {
   background-color: #1a1a1a;
   border: 1px solid #444;

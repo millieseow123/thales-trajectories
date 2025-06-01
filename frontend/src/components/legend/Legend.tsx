@@ -31,7 +31,7 @@ export default function Legend() {
                 <strong>{CONSTANTS.LEGEND.SPEED}</strong>
                 <div className={styles.greenSpeedContainer}>
                     <span></span>
-                    <span>&lt;{CONSTANTS.LEGEND.GREEN}</span>
+                    <span>&lt; {CONSTANTS.LEGEND.GREEN}</span>
                 </div>
                 <div className={styles.yellowSpeedContainer}>
                     <span></span>

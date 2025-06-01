@@ -7,6 +7,7 @@ import expandIconUrl from '@/assets/expand.png';
 import collapseIconUrl from '@/assets/collapse.png';
 import resetIconUrl from '@/assets/reset.png';
 import { CONSTANTS } from '@/constants/text';
+import CollapsibleSection from '@/components/collapsibleSection/CollapsibleSection';
 import Legend from '@/components/legend/Legend';
 import type { Trajectory } from '@shared/types/trajectory';
 import { groupAirportsByCountry } from '@/utils/groupAirportsByCountry';
@@ -214,125 +215,128 @@ export default function Sidebar({
                             )}
                         </div>
 
-                        <div className={styles.filters}>
-                            <h5>{CONSTANTS.SIDEBAR.AIRPORT.LABEL}</h5>
-                            <Select
-                                menuPortalTarget={document.body}
-                                styles={customStyles}
-                                menuPosition="fixed"
-                                menuShouldBlockScroll={true}
-                                options={groupedOptions}
-                                value={groupedOptions
-                                    .flatMap(g => g.options)
-                                    .find(opt => opt.value === adepFilter) || null}
-                                onChange={(selected) =>
-                                    setAdepFilter(selected?.value || '')
-                                }
-                                placeholder={CONSTANTS.SIDEBAR.AIRPORT.DEPARTURE}
-                                isClearable
-                                className={styles.select}
-                                classNamePrefix="select"
-                            />
-
-                            <Select
-                                menuPortalTarget={document.body}
-                                styles={customStyles}
-                                menuPosition="fixed"
-                                menuShouldBlockScroll={true}
-                                options={groupedOptions}
-                                value={groupedOptions
-                                    .flatMap(g => g.options)
-                                    .find(opt => opt.value === adesFilter) || null}
-                                onChange={(opt) => setAdesFilter(opt?.value || '')}
-                                filterOption={() => true}
-                                placeholder={CONSTANTS.SIDEBAR.AIRPORT.ARRIVAL}
-                                isClearable
-                                className={styles.select}
-                                classNamePrefix="select"
-                            />
-                        </div>
-
-                        <div className={styles.filters}>
-                            <h5>{CONSTANTS.SIDEBAR.TIME.LABEL}</h5>
-                            <div className={styles.quickFilters}>
-                                <button
-                                    className={selectedTimeFilter === 'today' ? styles.active : ''}
-                                    onClick={() => {
-                                        const now = new Date();
-                                        if (
-                                            startTime &&
-                                            startTime.getDate() === now.getDate() &&
-                                            startTime.getMonth() === now.getMonth() &&
-                                            startTime.getFullYear() === now.getFullYear()
-                                        ) {
-                                            setStartTime(null);
-                                            setSelectedTimeFilter('');
-                                        } else {
-                                            setSelectedTimeFilter('today');
-                                            setStartTime(now);
-                                        }
-                                    }}>
-                                    {CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.TODAY}
-                                </button>
-                                <button
-                                    className={selectedTimeFilter === '1h' ? styles.active : ''}
-                                    onClick={() => {
-                                        const last1h = new Date(Date.now() - 60 * 60 * 1000);
-                                        if (startTime && Math.abs(startTime.getTime() - last1h.getTime()) < 60000) {
-                                            setStartTime(null);
-                                            setSelectedTimeFilter('');
-                                        } else {
-                                            setSelectedTimeFilter('1h');
-                                            setStartTime(last1h);
-                                        }
-                                    }}>
-                                    {CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.LAST_1H}
-                                </button>
-                                <button
-                                    className={selectedTimeFilter === '24h' ? styles.active : ''}
-                                    onClick={() => {
-                                        const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
-                                        if (startTime && Math.abs(startTime.getTime() - last24h.getTime()) < 60000) {
-                                            setStartTime(null);
-                                            setSelectedTimeFilter('');
-                                        } else {
-                                            setSelectedTimeFilter('24h');
-                                            setStartTime(last24h);
-                                        }
-                                    }}>
-                                    {CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.LAST_24H}
-                                </button>
-                            </div>
-
-                            <div className={styles.dateContainer}>
-                                <DatePicker
-                                    selected={startTime}
-                                    onChange={(date) => setStartTime(date)}
-                                    showTimeSelect
-                                    showMonthDropdown
-                                    showYearDropdown
-                                    dropdownMode="select"
-                                    dateFormat="dd MMM HH:mm"
-                                    placeholderText="Start Time"
-                                    portalId="root"
-                                    popperPlacement="bottom-end" />
-
-                                <DatePicker
-                                    selected={endTime}
-                                    onChange={(date) => setEndTime(date)}
-                                    showTimeSelect
-                                    showMonthDropdown
-                                    showYearDropdown
-                                    dropdownMode="select"
-                                    dateFormat="dd MMM HH:mm"
-                                    placeholderText="End Time"
-                                    portalId="root"
-                                    popperPlacement="bottom-end"
+                        <CollapsibleSection title={CONSTANTS.SIDEBAR.AIRPORT.LABEL}>
+                            <div className={styles.filters}>
+                                <Select
+                                    menuPortalTarget={document.body}
+                                    styles={customStyles}
+                                    menuPosition="fixed"
+                                    menuShouldBlockScroll={true}
+                                    options={groupedOptions}
+                                    value={groupedOptions
+                                        .flatMap(g => g.options)
+                                        .find(opt => opt.value === adepFilter) || null}
+                                    onChange={(selected) =>
+                                        setAdepFilter(selected?.value || '')
+                                    }
+                                    placeholder={CONSTANTS.SIDEBAR.AIRPORT.DEPARTURE}
+                                    isClearable
+                                    className={styles.select}
+                                    classNamePrefix="select"
                                 />
 
+                                <Select
+                                    menuPortalTarget={document.body}
+                                    styles={customStyles}
+                                    menuPosition="fixed"
+                                    menuShouldBlockScroll={true}
+                                    options={groupedOptions}
+                                    value={groupedOptions
+                                        .flatMap(g => g.options)
+                                        .find(opt => opt.value === adesFilter) || null}
+                                    onChange={(opt) => setAdesFilter(opt?.value || '')}
+                                    filterOption={() => true}
+                                    placeholder={CONSTANTS.SIDEBAR.AIRPORT.ARRIVAL}
+                                    isClearable
+                                    className={styles.select}
+                                    classNamePrefix="select"
+                                />
                             </div>
-                        </div>
+                        </CollapsibleSection>
+
+                        <CollapsibleSection title={CONSTANTS.SIDEBAR.TIME.LABEL}>
+                            <div className={styles.filters}>
+                                <div className={styles.quickFilters}>
+                                    <button
+                                        className={selectedTimeFilter === 'today' ? styles.active : ''}
+                                        onClick={() => {
+                                            const now = new Date();
+                                            if (
+                                                startTime &&
+                                                startTime.getDate() === now.getDate() &&
+                                                startTime.getMonth() === now.getMonth() &&
+                                                startTime.getFullYear() === now.getFullYear()
+                                            ) {
+                                                setStartTime(null);
+                                                setSelectedTimeFilter('');
+                                            } else {
+                                                setSelectedTimeFilter('today');
+                                                setStartTime(now);
+                                            }
+                                        }}>
+                                        {CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.TODAY}
+                                    </button>
+                                    <button
+                                        className={selectedTimeFilter === '1h' ? styles.active : ''}
+                                        onClick={() => {
+                                            const last1h = new Date(Date.now() - 60 * 60 * 1000);
+                                            if (startTime && Math.abs(startTime.getTime() - last1h.getTime()) < 60000) {
+                                                setStartTime(null);
+                                                setSelectedTimeFilter('');
+                                            } else {
+                                                setSelectedTimeFilter('1h');
+                                                setStartTime(last1h);
+                                            }
+                                        }}>
+                                        {CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.LAST_1H}
+                                    </button>
+                                    <button
+                                        className={selectedTimeFilter === '24h' ? styles.active : ''}
+                                        onClick={() => {
+                                            const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                                            if (startTime && Math.abs(startTime.getTime() - last24h.getTime()) < 60000) {
+                                                setStartTime(null);
+                                                setSelectedTimeFilter('');
+                                            } else {
+                                                setSelectedTimeFilter('24h');
+                                                setStartTime(last24h);
+                                            }
+                                        }}>
+                                        {CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.LAST_24H}
+                                    </button>
+                                </div>
+
+                                <div className={styles.dateContainer}>
+                                    <DatePicker
+                                        selected={startTime}
+                                        onChange={(date) => setStartTime(date)}
+                                        showTimeSelect
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
+                                        dateFormat="dd MMM HH:mm"
+                                        placeholderText="Start Time"
+                                        portalId="root"
+                                        popperPlacement="bottom-end" />
+
+                                    <DatePicker
+                                        selected={endTime}
+                                        onChange={(date) => setEndTime(date)}
+                                        showTimeSelect
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
+                                        dateFormat="dd MMM HH:mm"
+                                        placeholderText="End Time"
+                                        portalId="root"
+                                        popperPlacement="bottom-end"
+                                    />
+
+                                </div>
+                            </div>
+                        </CollapsibleSection>
                     </div>
+
                     <hr className={styles.divider} />
 
                     <div className={styles.options}>

@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { getColorByRoute } from './colorByRoute';
 import { computeTotalDistance } from './computeDistance';
+import { haversineDistance } from "./distanceUtils";
 import { isICAO } from './icao';
 import { groupAirportsByCountry } from './groupAirportsByCountry';
-import { getIcaoToCoordsMap, getNearestAirport, haversineDistance, type Airport } from './loadAirports';
+import { getIcaoToCoordsMap, getNearestAirport, type Airport } from './loadAirports';
 import { getIncreasingOffset, getDecreasingOffset } from './offset';
 
 describe('getColorByRoute', () => {

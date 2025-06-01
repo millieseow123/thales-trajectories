@@ -57,13 +57,6 @@ describe('Sidebar', () => {
         expect(screen.getByText(CONSTANTS.SIDEBAR.AIRPORT.LABEL)).toBeInTheDocument();
         expect(screen.getByText(CONSTANTS.SIDEBAR.TIME.LABEL)).toBeInTheDocument();
 
-        expect(screen.getByText(CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.TODAY)).toBeInTheDocument();
-        expect(screen.getByText(CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.LAST_1H)).toBeInTheDocument();
-        expect(screen.getByText(CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.LAST_24H)).toBeInTheDocument();
-
-        expect(screen.getByPlaceholderText(CONSTANTS.SIDEBAR.TIME.START_TIME)).toBeInTheDocument();
-        expect(screen.getByPlaceholderText(CONSTANTS.SIDEBAR.TIME.END_TIME)).toBeInTheDocument();
-
         expect(screen.getByLabelText(CONSTANTS.SIDEBAR.TOGGLES.SHOW_ICAO)).toBeInTheDocument();
         expect(screen.getByLabelText(CONSTANTS.SIDEBAR.TOGGLES.SHOW_NAME)).toBeInTheDocument();
 
@@ -71,10 +64,30 @@ describe('Sidebar', () => {
         expect(screen.getByText(CONSTANTS.LEGEND.DEPARTURE)).toBeInTheDocument();
         expect(screen.getByText(CONSTANTS.LEGEND.ARRIVAL)).toBeInTheDocument();
         expect(screen.getByText(CONSTANTS.LEGEND.ICAO_CODE)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.LEGEND.SPEED)).toBeInTheDocument();
+        expect(screen.getByText(`<${CONSTANTS.LEGEND.GREEN}`)).toBeInTheDocument();
+        expect(screen.getByText(CONSTANTS.LEGEND.YELLOW, { exact: false })).toBeInTheDocument();
+        expect(screen.getByText(`> ${CONSTANTS.LEGEND.RED}`)).toBeInTheDocument();
 
         expect(document.querySelector('._greenMarker_ecab79')).toBeInTheDocument();
         expect(document.querySelector('._redMarker_ecab79')).toBeInTheDocument();
         expect(document.querySelector('._icaoBox_ecab79')).toBeInTheDocument();
+    });
+
+    it('shows airport filter section when airport collapsible header is clicked', () => {
+        render(<Sidebar {...defaultProps} />);
+        const airportHeader = screen.getByText(CONSTANTS.SIDEBAR.AIRPORT.LABEL);
+        expect(screen.queryByText(CONSTANTS.SIDEBAR.AIRPORT.DEPARTURE)).not.toBeInTheDocument();
+        fireEvent.click(airportHeader);
+        expect(screen.getByText(CONSTANTS.SIDEBAR.AIRPORT.DEPARTURE)).toBeInTheDocument();
+    });
+
+    it('shows time filter section when time collapsible header is clicked', () => {
+        render(<Sidebar {...defaultProps} />);
+        const timeHeader = screen.getByText(CONSTANTS.SIDEBAR.TIME.LABEL);
+        expect(screen.queryByText(CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.TODAY)).not.toBeInTheDocument();
+        fireEvent.click(timeHeader);
+        expect(screen.getByText(CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.TODAY)).toBeInTheDocument();
     });
 
     it('calls setShowAirportNames when toggling airport name checkbox', () => {
@@ -93,6 +106,9 @@ describe('Sidebar', () => {
 
     it('calls setStartTime when clicking quick filter buttons', () => {
         render(<Sidebar {...defaultProps} />);
+        const timeHeader = screen.getByText(CONSTANTS.SIDEBAR.TIME.LABEL);
+        fireEvent.click(timeHeader);
+
         const todayBtn = screen.getByText(CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.TODAY);
         fireEvent.click(todayBtn);
         expect(defaultProps.setStartTime).toHaveBeenCalled();

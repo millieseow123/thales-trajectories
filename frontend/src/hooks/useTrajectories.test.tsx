@@ -43,7 +43,6 @@ describe('useTrajectories', () => {
 
         const { result } = renderHook(() => useTrajectories());
         await waitFor(() => expect(result.current.loading).toBe(false));
-        console.log(">> ", result.current.data.length)
         expect(result.current.data.length).toBeGreaterThan(0);
         expect(result.current.error).toBeNull();
     });

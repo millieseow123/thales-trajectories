@@ -9,5 +9,9 @@ app.use(cors());
 app.use('/api/trajectories', trajectoriesRouter);
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    if (process.env.RENDER === 'true') {
+        console.log(`Server running on https://thales-trajectories.onrender.com/api/trajectories`);
+    } else {
+        console.log(`Server running on http://localhost:${PORT}/api/trajectories`);
+    }
 });

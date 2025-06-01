@@ -21,6 +21,8 @@ interface SidebarProps {
     flightIdFilter: string;
     setFlightIdFilter: (v: string) => void;
     setSelectedFlightId: (id: number | null) => void;
+    setSelectedTrajectory: (traj: Trajectory | null) => void;
+    setSelectedTrajectoryId: (id: number | null) => void;
     adepFilter: string;
     setAdepFilter: (v: string) => void;
     adesFilter: string;
@@ -42,6 +44,8 @@ export default function Sidebar({
     flightIdFilter,
     setFlightIdFilter,
     setSelectedFlightId,
+    setSelectedTrajectory,
+    setSelectedTrajectoryId,
     adepFilter,
     setAdepFilter,
     adesFilter,
@@ -145,6 +149,7 @@ export default function Sidebar({
                                 setAdesFilter('');
                                 setStartTime(null);
                                 setEndTime(null);
+                                setSelectedTimeFilter('');
                             }}
                             title={CONSTANTS.SIDEBAR.CLEAR_FILTERS_TOOLTIP}
                         >
@@ -203,9 +208,16 @@ export default function Sidebar({
                                         <li key={i} onClick={() => {
                                             const id = s.match(/\d+/)?.[0];
                                             if (id) {
+                                                const numericId = Number(id);
                                                 setFlightIdFilter(id);
-                                                setSelectedFlightId(Number(id));
+                                                setSelectedFlightId(numericId);
                                                 setFlightSuggestions([]);
+
+                                                const selected = trajectories.find(t => t.id === numericId);
+                                                if (selected) {
+                                                    setSelectedTrajectory(selected);
+                                                    setSelectedTrajectoryId(selected.id);
+                                                }
                                             }
                                         }}>
                                             {s}
@@ -226,8 +238,11 @@ export default function Sidebar({
                                     value={groupedOptions
                                         .flatMap(g => g.options)
                                         .find(opt => opt.value === adepFilter) || null}
-                                    onChange={(selected) =>
-                                        setAdepFilter(selected?.value || '')
+                                    onChange={(selected) => {
+                                        setAdepFilter(selected?.value || '');
+                                        setSelectedTrajectoryId(null);
+                                        setSelectedTrajectory(null);
+                                    }
                                     }
                                     placeholder={CONSTANTS.SIDEBAR.AIRPORT.DEPARTURE}
                                     isClearable
@@ -244,7 +259,11 @@ export default function Sidebar({
                                     value={groupedOptions
                                         .flatMap(g => g.options)
                                         .find(opt => opt.value === adesFilter) || null}
-                                    onChange={(opt) => setAdesFilter(opt?.value || '')}
+                                    onChange={(opt) => {
+                                        setAdesFilter(opt?.value || '');
+                                        setSelectedTrajectoryId(null);
+                                        setSelectedTrajectory(null);
+                                    }}
                                     filterOption={() => true}
                                     placeholder={CONSTANTS.SIDEBAR.AIRPORT.ARRIVAL}
                                     isClearable
@@ -272,6 +291,8 @@ export default function Sidebar({
                                             } else {
                                                 setSelectedTimeFilter('today');
                                                 setStartTime(now);
+                                                setSelectedTrajectoryId(null);
+                                                setSelectedTrajectory(null);
                                             }
                                         }}>
                                         {CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.TODAY}
@@ -286,6 +307,8 @@ export default function Sidebar({
                                             } else {
                                                 setSelectedTimeFilter('1h');
                                                 setStartTime(last1h);
+                                                setSelectedTrajectoryId(null);
+                                                setSelectedTrajectory(null);
                                             }
                                         }}>
                                         {CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.LAST_1H}
@@ -300,6 +323,8 @@ export default function Sidebar({
                                             } else {
                                                 setSelectedTimeFilter('24h');
                                                 setStartTime(last24h);
+                                                setSelectedTrajectoryId(null);
+                                                setSelectedTrajectory(null);
                                             }
                                         }}>
                                         {CONSTANTS.SIDEBAR.TIME.QUICK_FILTERS.LAST_24H}
@@ -309,7 +334,11 @@ export default function Sidebar({
                                 <div className={styles.dateContainer}>
                                     <DatePicker
                                         selected={startTime}
-                                        onChange={(date) => setStartTime(date)}
+                                        onChange={(date) => {
+                                            setStartTime(date);
+                                            setSelectedTrajectoryId(null);
+                                            setSelectedTrajectory(null);
+                                        }}
                                         showTimeSelect
                                         showMonthDropdown
                                         showYearDropdown
@@ -321,7 +350,11 @@ export default function Sidebar({
 
                                     <DatePicker
                                         selected={endTime}
-                                        onChange={(date) => setEndTime(date)}
+                                        onChange={(date) => {
+                                            setEndTime(date);
+                                            setSelectedTrajectoryId(null);
+                                            setSelectedTrajectory(null);
+                                        }}
                                         showTimeSelect
                                         showMonthDropdown
                                         showYearDropdown

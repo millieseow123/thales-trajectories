@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import arrowImg from '@/assets/arrow.png';
 import departureIcon from "@/assets/departure.png";
 import arrivalIcon from "@/assets/arrival.png";
@@ -21,13 +22,25 @@ export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
     const start = new Date(waypoints[0]?.time ?? 0);
     const end = new Date(waypoints[waypoints.length - 1]?.time ?? 0);
     const durationMin = (end.getTime() - start.getTime()) / (1000 * 60);
+    const durationHours = durationMin / 60;
     const hours = Math.floor(durationMin / 60);
     const minutes = Math.round(durationMin % 60);
 
     const distance = computeTotalDistance(waypoints);
-    const avgSpeed = distance / (durationMin / 60);
+    const avgSpeed = durationHours > 0 ? distance / durationHours : 0;
     const altitudes = waypoints.map(wp => wp.altitude).filter((a): a is number => a !== undefined);
     const maxAltitude = altitudes.length > 0 ? Math.max(...altitudes) : 0;
+
+    const departureTime = trajectory.waypoints?.[0]?.time;
+    const arrivalTime = trajectory.waypoints?.at(-1)?.time;
+
+    const formattedDepartureTime = departureTime
+        ? format(new Date(departureTime), 'dd MMM yyyy, HH:mm')
+        : 'N/A';
+
+    const formattedArrivalTime = arrivalTime
+        ? format(new Date(arrivalTime), 'dd MMM yyyy, HH:mm')
+        : 'N/A';
 
     return (
         <div className={styles.routeSummary}>
@@ -45,6 +58,7 @@ export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
                             <h3>{depIata}</h3>
                         </div>
                         <div>{dep}</div>
+                        <div className={styles.airportTime}>{formattedDepartureTime}</div>
                     </div>
 
                     <div className={styles.arrow}>
@@ -57,6 +71,8 @@ export function RouteSummary({ trajectory, onClose }: RouteSummaryProps) {
                             <h3>{arrIata}</h3>
                         </div>
                         <div>{arr}</div>
+                        <div className={styles.airportTime}>{formattedArrivalTime}</div>
+
                     </div>
                 </div>
                 <li>

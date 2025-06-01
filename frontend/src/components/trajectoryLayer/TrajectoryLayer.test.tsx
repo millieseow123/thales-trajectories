@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-import TrajectoryLayer from './TrajectoryLayer';
-import type { Trajectory } from '@shared/types/trajectory';
 import { MapContainer } from 'react-leaflet/MapContainer';
+import { describe, it, expect } from 'vitest';
+import type { Trajectory } from '@shared/types/trajectory';
+import TrajectoryLayer from './TrajectoryLayer';
 
 const mockTrajectories: Trajectory[] = [
     {

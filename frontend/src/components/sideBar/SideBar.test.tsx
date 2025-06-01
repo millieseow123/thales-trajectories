@@ -34,6 +34,8 @@ describe('Sidebar', () => {
         flightIdFilter: '',
         setFlightIdFilter: vi.fn(),
         setSelectedFlightId: vi.fn(),
+        setSelectedTrajectoryId: vi.fn(),
+        setSelectedTrajectory: vi.fn(),
         adepFilter: '',
         setAdepFilter: vi.fn(),
         adesFilter: '',
@@ -65,7 +67,7 @@ describe('Sidebar', () => {
         expect(screen.getByText(CONSTANTS.LEGEND.ARRIVAL)).toBeInTheDocument();
         expect(screen.getByText(CONSTANTS.LEGEND.ICAO_CODE)).toBeInTheDocument();
         expect(screen.getByText(CONSTANTS.LEGEND.SPEED)).toBeInTheDocument();
-        expect(screen.getByText(`<${CONSTANTS.LEGEND.GREEN}`)).toBeInTheDocument();
+        expect(screen.getByText(`< ${CONSTANTS.LEGEND.GREEN}`)).toBeInTheDocument();
         expect(screen.getByText(CONSTANTS.LEGEND.YELLOW, { exact: false })).toBeInTheDocument();
         expect(screen.getByText(`> ${CONSTANTS.LEGEND.RED}`)).toBeInTheDocument();
 

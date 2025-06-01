@@ -28,7 +28,7 @@ export const CONSTANTS = {
     },
     MAP_VIEW: {
         LEGEND_TITLE: 'Legend',
-        HINT: 'Cick on a flight route to view its summary',
+        HINT: 'Click on a flight route to view its summary',
         ERROR: 'Error loading data',
     },
     TRAJECTORY_LAYER: {

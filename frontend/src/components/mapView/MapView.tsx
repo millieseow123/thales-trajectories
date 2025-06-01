@@ -140,6 +140,8 @@ export default function MapView() {
                 <RouteSummary trajectory={selectedTrajectory} onClose={() => {
                     setSelectedTrajectory(null);
                     setSelectedTrajectoryId(null);
+                    hoveredIdRef.current = null;
+                    forceUpdate();
                 }} />
             )}
 
@@ -149,6 +151,8 @@ export default function MapView() {
                 flightIdFilter={flightIdFilter}
                 setFlightIdFilter={setFlightIdFilter}
                 setSelectedFlightId={setSelectedFlightId}
+                setSelectedTrajectory={setSelectedTrajectory}
+                setSelectedTrajectoryId={setSelectedTrajectoryId}
                 adepFilter={adepFilter}
                 setAdepFilter={setAdepFilter}
                 adesFilter={adesFilter}

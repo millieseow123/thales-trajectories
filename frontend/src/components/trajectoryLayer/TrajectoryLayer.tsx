@@ -1,12 +1,12 @@
 import L from 'leaflet';
 import { Polyline, Marker, Tooltip, CircleMarker } from 'react-leaflet';
+import { CONSTANTS } from '@/constants/text';
 import type { Trajectory } from '@shared/types/trajectory';
 import { getColorByRoute } from '@/utils/colorByRoute';
 import { getColorBySpeed } from '@/utils/colorBySpeed';
 import { haversineDistance } from '@/utils/distanceUtils';
 import { getDecreasingOffset, getIncreasingOffset } from '@/utils/offset';
 import styles from './TrajectoryLayer.module.css';
-import { CONSTANTS } from '@/constants/text';
 
 interface TrajectoryLayerProps {
     trajectories: Trajectory[];
@@ -71,7 +71,7 @@ export default function TrajectoryLayer({ trajectories,
 
     return (
         <>
-            {trajectories.map((traj) => {
+            {trajectories.map((traj, idx) => {
                 const rawPositions = traj.waypoints.map(wp => [wp.latitude, wp.longitude] as [number, number]);
                 const dep = traj.inferredAdepCoords ?? rawPositions[0];
                 const arrBase = traj.inferredAdesCoords ?? rawPositions[rawPositions.length - 1]!;
@@ -86,7 +86,7 @@ export default function TrajectoryLayer({ trajectories,
                 const isHovered = hoveredIdRef.current === traj.id;
                 const polylineWeight = isSelected || isHovered ? 5 : 2.5;
                 return (
-                    <div key={traj.id}>
+                    <div key={`wrapper-${traj.id}-${idx}`}>
                         {isSelected ? (
                             traj.waypoints.slice(1).map((wp2, i) => {
                                 const waypointsWithDepArr = [
@@ -109,7 +109,7 @@ export default function TrajectoryLayer({ trajectories,
                                         positions={[from, to]}
                                         pathOptions={{
                                             color: segmentColor,
-                                            weight: 5,
+                                            weight: isSelected || isHovered ? 5 : 2.5,
                                             opacity: 0.9,
                                         }}
                                         eventHandlers={{
@@ -126,12 +126,12 @@ export default function TrajectoryLayer({ trajectories,
                             })
                         ) : (
                             <Polyline
-                                key={traj.id}
+                                key={`polyline-${traj.id}`}
                                 positions={positions}
                                 pathOptions={{
                                     color: color,
                                     weight: polylineWeight,
-                                    opacity: selectedTrajectoryId && selectedTrajectoryId !== traj.id ? 0.01 : 1,
+                                    opacity: !isHovered && selectedTrajectoryId && selectedTrajectoryId !== traj.id ? 0.01 : 1,
                                 }}
                                 className={`${styles.trajectoryLine} ${selectedTrajectoryId && selectedTrajectoryId !== traj.id ? styles.dimmed : ''}`}
                                 eventHandlers={{

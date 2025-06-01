@@ -89,6 +89,12 @@
   width: 24px;
 }
 
+.airportTime {
+  color: #ccc;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
 .arrow {
   padding-inline: 1rem;
 }

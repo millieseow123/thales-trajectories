@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import { format } from 'date-fns';
 import { CONSTANTS } from '@/constants/text';
 import type { Trajectory } from '@shared/types/trajectory';
 import { computeTotalDistance } from '@/utils/computeDistance';
@@ -32,6 +33,13 @@ describe('RouteSummary', () => {
         expect(screen.getByText(mockTrajectory.inferredAdesName!)).toBeInTheDocument();
         expect(screen.getByText(mockTrajectory.adepIATA!)).toBeInTheDocument();
         expect(screen.getByText(mockTrajectory.adesIATA!)).toBeInTheDocument();
+        const depTime = mockTrajectory.waypoints?.[0]?.time;
+        const arrTime = mockTrajectory.waypoints?.at(-1)?.time;
+        const formattedDep = depTime ? format(new Date(depTime), 'dd MMM yyyy, HH:mm') : 'N/A';
+        const formattedArr = arrTime ? format(new Date(arrTime), 'dd MMM yyyy, HH:mm') : 'N/A';
+
+        expect(screen.getByText(formattedDep)).toBeInTheDocument();
+        expect(screen.getByText(formattedArr)).toBeInTheDocument();
 
         const waypoints = mockTrajectory.waypoints ?? [];
         const distance = computeTotalDistance(waypoints);
@@ -72,9 +80,9 @@ describe('RouteSummary', () => {
         render(<RouteSummary trajectory={incompleteTrajectory as Trajectory} onClose={() => { }} />);
         expect(screen.getByText(incompleteTrajectory.id!)).toBeInTheDocument();
         expect(screen.getAllByText('')).toBeTruthy();
-        expect(screen.getByText(/0 h 0 min/i)).toBeInTheDocument();
-        expect(screen.getByText(/0.0 km/i)).toBeInTheDocument();
-        expect(screen.getByText(/km\/h/i)).toBeInTheDocument();
-        expect(screen.getByText(/0 ft/i)).toBeInTheDocument();
+        expect(screen.getByText(`0 ${CONSTANTS.ROUTE_SUMMARY.H} 0 ${CONSTANTS.ROUTE_SUMMARY.MIN}`)).toBeInTheDocument();
+        expect(screen.getByText(`0.0 ${CONSTANTS.ROUTE_SUMMARY.KM}`)).toBeInTheDocument();
+        expect(screen.getByText(`0.0 ${CONSTANTS.ROUTE_SUMMARY.KM_PER_H}`)).toBeInTheDocument();
+        expect(screen.getByText(`0 ${CONSTANTS.ROUTE_SUMMARY.FT}`)).toBeInTheDocument();
     });
 });

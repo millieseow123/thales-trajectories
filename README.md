@@ -69,7 +69,15 @@ npx ts-node src/server.ts
 ```
 Your backend will run on: [http://localhost:4000](http://localhost:4000)
 
+### 🔧 Environment Variables
+
+Create a `.env` file in the root of the frontend project:
+```bash
+VITE_API_URL=http://localhost:4000
+```
+
 ### 🔧 Frontend Setup
+
 ```bash
 cd frontend
 npm install

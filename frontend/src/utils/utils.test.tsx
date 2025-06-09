@@ -17,8 +17,8 @@ describe('getColorByRoute', () => {
     it('handles empty strings', () => {
         expect(() => getColorByRoute('', '')).not.toThrow();
     });
-    it('returns a valid hex color for weird characters', () => {
-        expect(getColorByRoute('@@@', '$$$')).toMatch(/^#([0-9a-f]{6})$/i);
+    it('returns a valid hsl color for weird characters', () => {
+        expect(getColorByRoute('@@@', '$$$')).toMatch("hsl(232, 82%, 52%)");
     });
 });
 

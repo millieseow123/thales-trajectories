@@ -31,6 +31,7 @@ describe('Sidebar', () => {
     const defaultProps = {
         mapRef: { current: null } as React.RefObject<L.Map | null>,
         zoomLevel: 8,
+        hoveredIdRef: { current: null } as React.RefObject<number | null>,
         flightIdFilter: '',
         setFlightIdFilter: vi.fn(),
         setSelectedFlightId: vi.fn(),

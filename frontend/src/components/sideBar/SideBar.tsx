@@ -18,6 +18,7 @@ import styles from './SideBar.module.css';
 interface SidebarProps {
     mapRef: React.RefObject<L.Map | null>;
     zoomLevel: number;
+    hoveredIdRef: React.RefObject<number | null>
     flightIdFilter: string;
     setFlightIdFilter: (v: string) => void;
     setSelectedFlightId: (id: number | null) => void;
@@ -41,6 +42,7 @@ interface SidebarProps {
 export default function Sidebar({
     mapRef,
     zoomLevel,
+    hoveredIdRef,
     flightIdFilter,
     setFlightIdFilter,
     setSelectedFlightId,
@@ -150,6 +152,9 @@ export default function Sidebar({
                                 setStartTime(null);
                                 setEndTime(null);
                                 setSelectedTimeFilter('');
+                                setSelectedTrajectory(null);
+                                setSelectedTrajectoryId(null);
+                                hoveredIdRef.current = null;
                             }}
                             title={CONSTANTS.SIDEBAR.CLEAR_FILTERS_TOOLTIP}
                         >
@@ -193,7 +198,7 @@ export default function Sidebar({
                                         className={styles.clearInputBtn}
                                         onClick={() => {
                                             setFlightIdFilter('');
-                                            setSelectedFlightId(null);
+                                            hoveredIdRef.current = null;
                                         }}
                                         title="Clear"
                                     >

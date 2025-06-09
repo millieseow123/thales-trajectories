@@ -85,20 +85,25 @@ export default function TrajectoryLayer({ trajectories,
                 const isSelected = selectedTrajectoryId === traj.id;
                 const isHovered = hoveredIdRef.current === traj.id;
                 const polylineWeight = isSelected || isHovered ? 5 : 2.5;
+
+                const waypointsWithVisualOffset = [
+                    { ...traj.waypoints[0], latitude: dep[0], longitude: dep[1] },
+                    ...traj.waypoints.slice(1, -1),
+                    { ...traj.waypoints[traj.waypoints.length - 1], latitude: arr[0], longitude: arr[1] },
+                ];
+
+
                 return (
                     <div key={`wrapper-${traj.id}-${idx}`}>
                         {isSelected ? (
-                            traj.waypoints.slice(1).map((wp2, i) => {
-                                const waypointsWithDepArr = [
-                                    { ...traj.waypoints[0], latitude: dep[0], longitude: dep[1] },
-                                    ...traj.waypoints.slice(1, -1),
-                                    { ...traj.waypoints[traj.waypoints.length - 1], latitude: arr[0], longitude: arr[1] }
-                                ];
-                                const wp1 = waypointsWithDepArr[i];
+                            waypointsWithVisualOffset.slice(1).map((wp2, i) => {
+                                const wp1 = waypointsWithVisualOffset[i];
                                 const from: [number, number] = [wp1.latitude, wp1.longitude];
                                 const to: [number, number] = [wp2.latitude, wp2.longitude];
-                                const distance = haversineDistance(...from, ...to);
-                                if (!wp1.time || !wp2.time) return null;
+                                const calcFrom = traj.waypoints[i];
+                                const calcTo = traj.waypoints[i + 1];
+
+                                const distance = haversineDistance(calcFrom.latitude, calcFrom.longitude, calcTo.latitude, calcTo.longitude);                                if (!wp1.time || !wp2.time) return null;
                                 const timeDiff = (new Date(wp2.time).getTime() - new Date(wp1.time).getTime()) / 3600000;
                                 const speed = distance / timeDiff;
                                 const segmentColor = getColorBySpeed(speed);

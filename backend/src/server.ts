@@ -4,8 +4,13 @@ import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-
-app.use(cors());
+  
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production'
+        ? 'https://thales-trajectories.vercel.app'
+        : true
+}));
+  
 app.use('/api/trajectories', trajectoriesRouter);
 
 app.listen(PORT, () => {

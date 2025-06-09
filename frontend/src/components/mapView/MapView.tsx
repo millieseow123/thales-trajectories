@@ -11,6 +11,7 @@ import { CONSTANTS } from '@/constants/text';
 import { useTrajectories } from '@/hooks/useTrajectories';
 import type { Trajectory } from '@shared/types/trajectory';
 import styles from './MapView.module.css';
+import { MapRefSetter } from './MapRefSetter';
 
 export default function MapView() {
     const { data: trajectories, loading, error } = useTrajectories();
@@ -42,6 +43,18 @@ export default function MapView() {
         if (zoomIn) zoomIn.title = 'Zoom in';
         if (zoomOut) zoomOut.title = 'Zoom out';
     }, []);
+
+    useEffect(() => {
+        if (selectedTrajectory && mapRef.current) {
+            const first = selectedTrajectory.waypoints?.[0];
+            if (first) {
+                mapRef.current.setView([first.latitude, first.longitude], 6, {
+                    animate: true,
+                    duration: 1,
+                });
+            }
+        }
+    }, [selectedTrajectory]);
 
     const handlePolylineClick = (id: number) => {
         setSelectedTrajectoryId(id);
@@ -108,6 +121,7 @@ export default function MapView() {
             }}
             className={styles.mapContainer}
         >
+            <MapRefSetter mapRef={mapRef} />
             {showHint && (
                 <div className={styles.hint}>
                     {CONSTANTS.MAP_VIEW.HINT}
@@ -138,6 +152,7 @@ export default function MapView() {
 
             {selectedTrajectory && (
                 <RouteSummary trajectory={selectedTrajectory} onClose={() => {
+                    setSelectedFlightId(null);
                     setSelectedTrajectory(null);
                     setSelectedTrajectoryId(null);
                     hoveredIdRef.current = null;
@@ -148,6 +163,7 @@ export default function MapView() {
             <Sidebar
                 mapRef={mapRef}
                 zoomLevel={zoomLevel}
+                hoveredIdRef={hoveredIdRef}
                 flightIdFilter={flightIdFilter}
                 setFlightIdFilter={setFlightIdFilter}
                 setSelectedFlightId={setSelectedFlightId}

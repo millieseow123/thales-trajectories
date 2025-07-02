@@ -1,36 +1,45 @@
 import 'dotenv/config'; 
-import { createPool } from 'mysql2/promise';
+// import { createPool } from 'mysql2/promise';
 import fs from 'fs';
 import type { Trajectory } from '@shared/types/trajectory';
+import path from 'path';
 
-const pool = createPool({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    port: Number(process.env.DB_PORT) || 3306,
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'trajectories_db',
-});
+
 
 export async function loadTrajectories(limit = 100, offset = 0): Promise<Trajectory[]> {
-    const [rows] = await pool.query(
-        'SELECT * FROM trajectories LIMIT ? OFFSET ?',
-        [limit, offset]
-    );
-
-    return (rows as any[]).flatMap(row => {
-        if (row.id && row.adep && row.ades && Array.isArray(row.waypoints)) {
-            return [{
-                id: row.id,
-                adep: row.adep,
-                ades: row.ades,
-                waypoints: row.waypoints,
-            }];
-        } else {
-            console.warn(`[WARN] Skipping malformed row: ${JSON.stringify(row)}`);
-            return [];
-        }
-    })
+    const filePath = path.join(__dirname, 'trajectories.jsonl'); 
+    const allTrajectories = parseTrajectoryFile(filePath);
+    return allTrajectories.slice(offset, offset + limit);
 }
+// Uncomment to load trajectories from MySQL database instead 
+// const pool = createPool({
+//     host: process.env.DB_HOST || 'localhost',
+//     user: process.env.DB_USER || 'root',
+//     port: Number(process.env.DB_PORT) || 3306,
+//     password: process.env.DB_PASSWORD || '',
+//     database: process.env.DB_NAME || 'trajectories_db',
+// });
+//
+// export async function loadTrajectories(limit = 100, offset = 0): Promise<Trajectory[]> {
+//     const [rows] = await pool.query(
+//         'SELECT * FROM trajectories LIMIT ? OFFSET ?',
+//         [limit, offset]
+//     );
+
+//     return (rows as any[]).flatMap(row => {
+//         if (row.id && row.adep && row.ades && Array.isArray(row.waypoints)) {
+//             return [{
+//                 id: row.id,
+//                 adep: row.adep,
+//                 ades: row.ades,
+//                 waypoints: row.waypoints,
+//             }];
+//         } else {
+//             console.warn(`[WARN] Skipping malformed row: ${JSON.stringify(row)}`);
+//             return [];
+//         }
+//     })
+// }
 
 export function parseTrajectoryFile(filePath: string): Trajectory[] {
     const parsed: Trajectory[] = [];
